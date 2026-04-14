@@ -24,9 +24,14 @@ define('DETIT_VERSION', '0.1.0');
 // Plugin includes
 require_once DETIT_PLUGIN_DIR . 'includes/seo-score.php';
 require_once DETIT_PLUGIN_DIR . 'includes/meta-handler.php';
+require_once DETIT_PLUGIN_DIR . 'includes/audit-engine.php';
+require_once DETIT_PLUGIN_DIR . 'includes/generator-engine.php';
+require_once DETIT_PLUGIN_DIR . 'includes/loader.php';
+
 require_once DETIT_PLUGIN_DIR . 'admin/dashboard.php';
 require_once DETIT_PLUGIN_DIR . 'admin/product-panel.php';
 require_once DETIT_PLUGIN_DIR . 'admin/bulk-tools.php';
+
 require_once DETIT_PLUGIN_DIR . 'api/audit-endpoint.php';
 require_once DETIT_PLUGIN_DIR . 'api/generator-endpoint.php';
 require_once DETIT_PLUGIN_DIR . 'api/scan-endpoint.php';
@@ -37,8 +42,8 @@ if (!in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get
     return;
 }
 
-
-
+// Text domain for Translation
+load_plugin_textdomain('detit', false, dirname(plugin_basename(__FILE__)) . '/languages');
 
 function detit_activate()
 {
@@ -71,20 +76,9 @@ function detit_deactivate()
 
 register_deactivation_hook(__FILE__, 'detit_deactivate');
 
-function detit_uninstall()
-{
-    // Drop database table
-    global $wpdb;
-    $table_name = $wpdb->prefix . 'detit_products';
-    $wpdb->query("DROP TABLE IF EXISTS $table_name");
 
-    // Cleanup options
-    delete_option('detit_api_key');
-    delete_option('detit_scan_status');
-}
 
-register_uninstall_hook(__FILE__, 'detit_uninstall');
-
+// Menu
 function detit_admin_menu()
 {
     add_menu_page(
