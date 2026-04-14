@@ -28,6 +28,8 @@ require_once DETIT_PLUGIN_DIR . 'includes/audit-engine.php';
 require_once DETIT_PLUGIN_DIR . 'includes/generator-engine.php';
 require_once DETIT_PLUGIN_DIR . 'includes/loader.php';
 
+require_once DETIT_PLUGIN_DIR . 'includes/meta-module/bootstrap.php';
+
 require_once DETIT_PLUGIN_DIR . 'admin/dashboard.php';
 require_once DETIT_PLUGIN_DIR . 'admin/product-panel.php';
 require_once DETIT_PLUGIN_DIR . 'admin/bulk-tools.php';
@@ -35,6 +37,8 @@ require_once DETIT_PLUGIN_DIR . 'admin/bulk-tools.php';
 require_once DETIT_PLUGIN_DIR . 'api/audit-endpoint.php';
 require_once DETIT_PLUGIN_DIR . 'api/generator-endpoint.php';
 require_once DETIT_PLUGIN_DIR . 'api/scan-endpoint.php';
+
+
 
 
 // Dependency check 

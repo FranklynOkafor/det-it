@@ -1,0 +1,140 @@
+<?php
+
+/**
+ * Meta Tag Output
+ *
+ * Hooks into wp_head to output the meta description tag when:
+ *   1. The current page is a WooCommerce product page.
+ *   2. A meta description exists in DetIt's storage.
+ *   3. No active SEO plugin is already handling meta output.
+ *
+ * This prevents duplicate meta tags when a third-party SEO plugin is present.
+ *
+ * @package DetIt
+ * @since   1.0.0
+ */
+
+namespace DetIt\Meta;
+
+if (! defined('ABSPATH')) {
+  exit;
+}
+
+class Meta_Output
+{
+
+  /**
+   * Register wp_head hook.
+   *
+   * Called once from the main plugin bootstrap.
+   *
+   * @return void
+   */
+  public static function register(): void
+  {
+    // Priority 5 — run early so other plugins can unhook if needed.
+    add_action('wp_head', [self::class, 'output_meta_tags'], 5);
+  }
+
+  /**
+   * Output meta tags in <head>.
+   *
+   * Guard conditions (all must be true to output anything):
+   *   - Is a singular product page.
+   *   - No supported SEO plugin is active (they handle their own output).
+   *   - A meta description value exists for this product.
+   *
+   * @return void
+   */
+  public static function output_meta_tags(): void
+  {
+    // Only run on single product pages.
+    if (! is_singular('product')) {
+      return;
+    }
+
+    // Defer to active SEO plugins — they own meta output when present.
+    if (SEO_Detector::has_seo_plugin()) {
+      return;
+    }
+
+    $product_id = get_queried_object_id();
+    if (! $product_id) {
+      return;
+    }
+
+    self::output_meta_description($product_id);
+    self::output_meta_title($product_id);
+    // self::output_meta_keywords($product_id);
+  }
+
+    // -------------------------------------------------------------------------
+    // Private output helpers
+    // -------------------------------------------------------------------------
+
+  /**
+   * Output <meta name="description"> tag.
+   *
+   * @param  int $product_id
+   * @return void
+   */
+  private static function output_meta_description(int $product_id): void
+  {
+    $desc = Meta_Handler::get_meta_description($product_id);
+
+    if ('' === $desc) {
+      return;
+    }
+
+    printf(
+      '<meta name="description" content="%s" />' . "\n",
+      esc_attr($desc)
+    );
+  }
+
+  /**
+   * Output <meta name="title"> / <title> override tag.
+   *
+   * Only outputs when DetIt has an explicit meta title stored.
+   * We do NOT override the <title> tag itself (WordPress owns that),
+   * but we output the Open Graph og:title for completeness.
+   *
+   * @param  int $product_id
+   * @return void
+   */
+  private static function output_meta_title(int $product_id): void
+  {
+    $title = Meta_Handler::get_meta_title($product_id);
+
+    if ('' === $title) {
+      return;
+    }
+
+    printf(
+      '<meta property="og:title" content="%s" />' . "\n",
+      esc_attr($title)
+    );
+  }
+
+  /**
+   * Output <meta name="keywords"> tag.
+   *
+   * Note: Google ignores this tag but some other search engines still
+   * read it, and it is useful for internal auditing purposes.
+   *
+   * @param  int $product_id
+   * @return void
+   */
+  // private static function output_meta_keywords( int $product_id ): void {
+  //     $keyword = Meta_Handler::get_focus_keyword( $product_id );
+
+  //     if ( '' === $keyword ) {
+  //         return;
+  //     }
+
+  //     printf(
+  //         '<meta name="keywords" content="%s" />' . "\n",
+  //         esc_attr( $keyword )
+  //     );
+  // }
+}
