@@ -33,12 +33,14 @@ require_once __DIR__ . '/class-meta-box.php';
  *
  * @return void
  */
+function boot(): void {
 
-// Front-end: output meta tags when no SEO plugin is present.
-if (! is_admin()) {
-  Meta_Output::register();
-}
+  // Front-end: output meta tags when no SEO plugin is present.
+  if ( ! is_admin() ) {
+    Meta_Output::register();
+  }
 
-if (is_admin()) {
-  Meta_Box::register();
+  if ( is_admin() ) {
+    Meta_Box::register();
+  }
 }

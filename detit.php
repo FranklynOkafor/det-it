@@ -10,7 +10,7 @@
  */
 
 if (! defined('ABSPATH')) {
-    exit;
+  exit;
 }
 
 
@@ -19,31 +19,41 @@ if (! defined('ABSPATH')) {
 define('DETIT_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('DETIT_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('DETIT_VERSION', '0.1.0');
-
-
-// Plugin includes
-require_once DETIT_PLUGIN_DIR . 'includes/seo-score.php';
-require_once DETIT_PLUGIN_DIR . 'includes/meta-handler.php';
-require_once DETIT_PLUGIN_DIR . 'includes/audit-engine.php';
-require_once DETIT_PLUGIN_DIR . 'includes/generator-engine.php';
-require_once DETIT_PLUGIN_DIR . 'includes/loader.php';
-
-require_once DETIT_PLUGIN_DIR . 'includes/meta-module/bootstrap.php';
-
-require_once DETIT_PLUGIN_DIR . 'admin/dashboard.php';
-require_once DETIT_PLUGIN_DIR . 'admin/product-panel.php';
-require_once DETIT_PLUGIN_DIR . 'admin/bulk-tools.php';
-
-require_once DETIT_PLUGIN_DIR . 'api/audit-endpoint.php';
-require_once DETIT_PLUGIN_DIR . 'api/generator-endpoint.php';
-require_once DETIT_PLUGIN_DIR . 'api/scan-endpoint.php';
-
+define( 'DETIT_FILE', __FILE__ );
 
 
 
 // Dependency check 
-if (!in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))) {
+function detit_woocommerce_active()
+{
+  return class_exists('WooCommerce');
+}
+
+function detit_init()
+{
+
+  if (! detit_woocommerce_active()) {
+    add_action('admin_notices', 'detit_wc_missing_notice');
     return;
+  }
+
+  // Load plugin services
+  require_once DETIT_PLUGIN_DIR . 'includes/loader.php';
+  \DetIt\Loader::init();
+
+  load_plugin_textdomain('detit', false, dirname(plugin_basename(__FILE__)) . '/languages');
+}
+
+add_action('plugins_loaded', 'detit_init');
+
+
+function detit_wc_missing_notice()
+{
+?>
+  <div class="notice notice-error">
+    <p><strong>DetIt:</strong> This plugin requires WooCommerce to be active.</p>
+  </div>
+<?php
 }
 
 // Text domain for Translation
@@ -51,12 +61,18 @@ load_plugin_textdomain('detit', false, dirname(plugin_basename(__FILE__)) . '/la
 
 function detit_activate()
 {
-    // Create necessary database tables
-    global $wpdb;
-    $table_name = $wpdb->prefix . 'detit_products';
-    $charset_collate = $wpdb->get_charset_collate();
+  // Check dependency
+  if (! is_plugin_active('woocommerce/woocommerce.php')) {
+    deactivate_plugins(plugin_basename(__FILE__));
+    wp_die('DetIt requires WooCommerce to be installed and active.');
+  }
 
-    $sql = "CREATE TABLE $table_name (
+  // Create necessary database tables
+  global $wpdb;
+  $table_name = $wpdb->prefix . 'detit_products';
+  $charset_collate = $wpdb->get_charset_collate();
+
+  $sql = "CREATE TABLE $table_name (
 		id bigint(20) NOT NULL AUTO_INCREMENT,
 		product_id bigint(20) NOT NULL,
 		seo_score int DEFAULT 0,
@@ -65,17 +81,17 @@ function detit_activate()
 		UNIQUE KEY product_id (product_id)
 	) $charset_collate";
 
-    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-    dbDelta($sql);
+  require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+  dbDelta($sql);
 }
 
 register_activation_hook(__FILE__, 'detit_activate');
 
 function detit_deactivate()
 {
-    // Cleanup options
-    delete_option('detit_api_key');
-    delete_option('detit_scan_status');
+  // Cleanup options
+  delete_option('detit_api_key');
+  delete_option('detit_scan_status');
 }
 
 register_deactivation_hook(__FILE__, 'detit_deactivate');
@@ -85,23 +101,23 @@ register_deactivation_hook(__FILE__, 'detit_deactivate');
 // Menu
 function detit_admin_menu()
 {
-    add_menu_page(
-        'DetIt SEO',
-        'DetIt SEO',
-        'manage_options',
-        'detit-dashboard',
-        'detit_dashboard_page',
-        'dashicons-chart-bar',
-        6
-    );
+  add_menu_page(
+    'DetIt SEO',
+    'DetIt SEO',
+    'manage_options',
+    'detit-dashboard',
+    'detit_dashboard_page',
+    'dashicons-chart-bar',
+    6
+  );
 
-    add_submenu_page(
-        'detit-dashboard',
-        'Bulk Tools',
-        'Bulk Tools',
-        'manage_options',
-        'detit-bulk-tools',
-        'detit_bulk_tools_page'
-    );
+  add_submenu_page(
+    'detit-dashboard',
+    'Bulk Tools',
+    'Bulk Tools',
+    'manage_options',
+    'detit-bulk-tools',
+    'detit_bulk_tools_page'
+  );
 }
 add_action('admin_menu', 'detit_admin_menu');
