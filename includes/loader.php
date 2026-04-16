@@ -13,8 +13,7 @@ class Loader
     self::register_hooks();
   }
 
-  private static function load_modules(): void
-  {
+  private static function load_modules(): void{
 
     // Content Generation
     require_once DETIT_PLUGIN_DIR . 'includes/content-generation/bootstrap.php';
