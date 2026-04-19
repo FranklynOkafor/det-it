@@ -19,7 +19,7 @@ if (! defined('ABSPATH')) {
 define('DETIT_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('DETIT_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('DETIT_VERSION', '0.1.0');
-define( 'DETIT_FILE', __FILE__ );
+define('DETIT_FILE', __FILE__);
 
 
 
@@ -39,7 +39,17 @@ function detit_init()
 
   // Load plugin services
   require_once DETIT_PLUGIN_DIR . 'includes/loader.php';
+  require_once DETIT_PLUGIN_DIR . 'includes/plugin.php';
+
   \DetIt\Loader::init();
+  function run_detit()
+  {
+
+    $plugin = new \DetIt\Plugin();
+    $plugin->run();
+  }
+
+  run_detit();
 
   load_plugin_textdomain('detit', false, dirname(plugin_basename(__FILE__)) . '/languages');
 }
