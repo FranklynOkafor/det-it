@@ -26,7 +26,10 @@ define('DETIT_FILE', __FILE__);
 // Dependency check 
 function detit_woocommerce_active()
 {
-  return class_exists('WooCommerce');
+  if (!function_exists('is_plugin_active')) {
+    require_once ABSPATH . 'wp-admin/includes/plugin.php';
+  }
+  return class_exists('WooCommerce') || is_plugin_active('woocommerce/woocommerce.php');
 }
 
 function detit_init()
@@ -59,9 +62,21 @@ add_action('plugins_loaded', 'detit_init');
 
 function detit_wc_missing_notice()
 {
+  if (!current_user_can('manage_options')) {
+    return;
+  }
+
+  $plugin_path = 'woocommerce/woocommerce.php';
+  $is_installed = file_exists(WP_PLUGIN_DIR . '/' . $plugin_path);
+  $action_url = $is_installed 
+    ? wp_nonce_url(admin_url('plugins.php?action=activate&plugin=' . $plugin_path), 'activate-plugin_' . $plugin_path)
+    : wp_nonce_url(admin_url('update.php?action=install-plugin&plugin=woocommerce'), 'install-plugin_woocommerce');
+
+  $action_text = $is_installed ? 'Activate WooCommerce' : 'Install WooCommerce';
 ?>
-  <div class="notice notice-error">
-    <p><strong>DetIt:</strong> This plugin requires WooCommerce to be active.</p>
+  <div class="notice notice-error is-dismissible">
+    <p><strong>DetIt:</strong> This plugin requires WooCommerce to be installed and active.</p>
+    <p><a href="<?php echo esc_url($action_url); ?>" class="button button-primary"><?php echo esc_html($action_text); ?></a></p>
   </div>
 <?php
 }
@@ -72,9 +87,13 @@ load_plugin_textdomain('detit', false, dirname(plugin_basename(__FILE__)) . '/la
 function detit_activate()
 {
   // Check dependency
-  if (! is_plugin_active('woocommerce/woocommerce.php')) {
+  if (!function_exists('is_plugin_active')) {
+    require_once ABSPATH . 'wp-admin/includes/plugin.php';
+  }
+
+  if (!is_plugin_active('woocommerce/woocommerce.php') && !class_exists('WooCommerce')) {
     deactivate_plugins(plugin_basename(__FILE__));
-    wp_die('DetIt requires WooCommerce to be installed and active.');
+    wp_die('DetIt requires WooCommerce to be installed and active. <br><br><a href="' . admin_url('plugins.php') . '" class="button button-primary">Back to Plugins</a>');
   }
 
   // Create necessary database tables
@@ -108,26 +127,4 @@ register_deactivation_hook(__FILE__, 'detit_deactivate');
 
 
 
-// Menu
-function detit_admin_menu()
-{
-  add_menu_page(
-    'DetIt SEO',
-    'DetIt SEO',
-    'manage_options',
-    'detit-dashboard',
-    'detit_dashboard_page',
-    'dashicons-chart-bar',
-    6
-  );
-
-  add_submenu_page(
-    'detit-dashboard',
-    'Bulk Tools',
-    'Bulk Tools',
-    'manage_options',
-    'detit-bulk-tools',
-    'detit_bulk_tools_page'
-  );
-}
-add_action('admin_menu', 'detit_admin_menu');
+// UI code safely migrated to wrapped admin OOP classes.

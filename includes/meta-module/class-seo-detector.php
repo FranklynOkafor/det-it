@@ -61,6 +61,15 @@ class SEO_Detector {
             self::$detected = self::PLUGIN_NONE;
         }
 
+        /**
+         * Filter the detected SEO plugin.
+         *
+         * Useful for unit testing or overriding detection.
+         *
+         * @param string $detected The detected plugin identifier (PLUGIN_* constant).
+         */
+        self::$detected = apply_filters( 'detit_seo_plugin_detected', self::$detected );
+
         return self::$detected;
     }
 

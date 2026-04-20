@@ -43,4 +43,19 @@ function boot(): void {
   if ( is_admin() ) {
     Meta_Box::register();
   }
+
+  
+
+  // Test message to check if the plugin is working
+
+
+  // $display_test_message = function() {
+  //     $plugin = SEO_Detector::detect();
+  //     $message = 'none' === $plugin ? 'No SEO plugin installed.' : 'Installed SEO plugin: ' . $plugin;
+      
+  //     echo '<div style="background: yellow; color: black; padding: 10px; margin: 10px; font-weight: bold; border: 2px solid red; z-index: 99999; position: relative; text-align: center;">DetIt Test: ' . esc_html( $message ) . '</div>';
+  // };
+
+  // add_action( 'admin_notices', $display_test_message );
+  // add_action( 'wp_footer', $display_test_message );
 }

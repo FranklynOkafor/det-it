@@ -26,6 +26,7 @@ class Loader
         \DetIt\SeoAudit\boot();
 
         // Meta Module
+        require_once DETIT_PLUGIN_DIR . 'includes/meta-module/meta-engine.php';
         require_once DETIT_PLUGIN_DIR . 'includes/meta-module/bootstrap.php';
         \DetIt\Meta\boot();
 
