@@ -17,6 +17,14 @@ class Loader
 
     private static function load_modules(): void
     {
+        // Support
+        require_once DETIT_PLUGIN_DIR . 'includes/Support/Correlation.php';
+        require_once DETIT_PLUGIN_DIR . 'includes/Support/Timer.php';
+        require_once DETIT_PLUGIN_DIR . 'includes/Support/Logger.php';
+
+        // Settings
+        require_once DETIT_PLUGIN_DIR . 'includes/Admin/Settings/LoggingSettings.php';
+
         // Content Generation
         require_once DETIT_PLUGIN_DIR . 'includes/content-generation/bootstrap.php';
         \DetIt\ContentGenerator\boot();
@@ -67,6 +75,8 @@ class Loader
     {
         // Admin hooks
         if (is_admin()) {
+
+            \DetIt\Admin\Settings\LoggingSettings::register();
 
             $dashboard = new \DetIt\Admin\Dashboard();
 
