@@ -2,57 +2,89 @@
 
 namespace DetIt\Support;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Class Timer
  *
  * Utility for measuring execution duration.
  */
 class Timer {
-    /**
-     * @var array Active timers.
-     */
-    private static array $timers = [];
 
-    /**
-     * Start a timer.
-     *
-     * @param string $label The timer label.
-     */
-    public static function start(string $label): void {
-        self::$timers[$label] = microtime(true);
-    }
+	/**
+	 * Active timer start times.
+	 *
+	 * @var array<string, float>
+	 */
+	private static array $start_times = array();
 
-    /**
-     * Stop a timer.
-     *
-     * @param string $label The timer label.
-     */
-    public static function stop(string $label): void {
-        if (!isset(self::$timers[$label])) {
-            return;
-        }
-        $duration = microtime(true) - self::$timers[$label];
-        self::$timers[$label . '_duration'] = $duration;
-        unset(self::$timers[$label]);
-    }
+	/**
+	 * Completed timer durations.
+	 *
+	 * @var array<string, float>
+	 */
+	private static array $durations = array();
 
-    /**
-     * Get the duration of a stopped timer as a formatted string.
-     *
-     * @param string $label The timer label.
-     * @return string
-     */
-    public static function duration(string $label): string {
-        $key = $label . '_duration';
-        if (!isset(self::$timers[$key])) {
-            // Check if it's currently running
-            if (isset(self::$timers[$label])) {
-                $duration = microtime(true) - self::$timers[$label];
-                return round($duration, 3) . 's';
-            }
-            return '0.000s';
-        }
+	/**
+	 * Start a timer.
+	 *
+	 * @param string $label Timer label.
+	 * @return void
+	 */
+	public static function start( string $label ): void {
+		self::$start_times[ $label ] = microtime( true );
+		unset( self::$durations[ $label ] );
+	}
 
-        return round(self::$timers[$key], 3) . 's';
-    }
+	/**
+	 * Stop a timer.
+	 *
+	 * @param string $label Timer label.
+	 * @return void
+	 */
+	public static function stop( string $label ): void {
+		if ( ! isset( self::$start_times[ $label ] ) ) {
+			return;
+		}
+
+		self::$durations[ $label ] = microtime( true ) - self::$start_times[ $label ];
+		unset( self::$start_times[ $label ] );
+	}
+
+	/**
+	 * Get a timer duration as a formatted string.
+	 *
+	 * @param string $label Timer label.
+	 * @return string
+	 */
+	public static function duration( string $label ): string {
+		if ( isset( self::$durations[ $label ] ) ) {
+			return self::format_duration( self::$durations[ $label ] );
+		}
+
+		if ( isset( self::$start_times[ $label ] ) ) {
+			return self::format_duration( microtime( true ) - self::$start_times[ $label ] );
+		}
+
+		return self::format_duration( 0.0 );
+	}
+
+	/**
+	 * Format a duration for structured logs.
+	 *
+	 * @param float $seconds Duration in seconds.
+	 * @return string
+	 */
+	private static function format_duration( float $seconds ): string {
+		$formatted = number_format( $seconds, 3, '.', '' );
+		$formatted = rtrim( rtrim( $formatted, '0' ), '.' );
+
+		if ( '' === $formatted ) {
+			$formatted = '0';
+		}
+
+		return $formatted . 's';
+	}
 }

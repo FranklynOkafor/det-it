@@ -25,6 +25,7 @@ require_once __DIR__ . '/checks/alt-check.php';
 require_once __DIR__ . '/checks/keyword-check.php';
 require_once __DIR__ . '/checks/meta-description-check.php';
 require_once __DIR__ . '/checks/title-check.php';
+require_once __DIR__ . '/checks/description-check.php';
 
 
 function boot()

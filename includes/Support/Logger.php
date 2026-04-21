@@ -2,199 +2,331 @@
 
 namespace DetIt\Support;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Class Logger
  *
  * Centralized logging interface for the entire plugin.
  */
-class Logger
-{
+class Logger {
 
-    /**
-     * Log an error message.
-     *
-     * @param string $message
-     * @param array $context
-     */
-    public static function error(string $message, array $context = []): void
-    {
-        if (self::should_log('error')) {
-            self::write_log('error', $message, $context);
-        }
-    }
+	/**
+	 * Logger source name.
+	 *
+	 * @var string
+	 */
+	private const SOURCE = 'detit';
 
-    /**
-     * Log a warning message.
-     *
-     * @param string $message
-     * @param array $context
-     */
-    public static function warning(string $message, array $context = []): void
-    {
-        if (self::should_log('warning')) {
-            self::write_log('warning', $message, $context);
-        }
-    }
+	/**
+	 * Log level priorities.
+	 *
+	 * @var array<string, int>
+	 */
+	private static array $levels = array(
+		'error'   => 0,
+		'warning' => 1,
+		'info'    => 2,
+		'debug'   => 3,
+	);
 
-    /**
-     * Log an info message.
-     *
-     * @param string $message
-     * @param array $context
-     */
-    public static function info(string $message, array $context = []): void
-    {
-        if (self::should_log('info')) {
-            self::write_log('info', $message, $context);
-        }
-    }
+	/**
+	 * Cached debug mode value.
+	 *
+	 * @var bool|null
+	 */
+	private static ?bool $debug_mode = null;
 
-    /**
-     * Log a debug message.
-     *
-     * @param string $message
-     * @param array $context
-     */
-    public static function debug(string $message, array $context = []): void
-    {
-        if (self::should_log('debug')) {
-            self::write_log('debug', $message, $context);
-        }
-    }
+	/**
+	 * Cached log level threshold.
+	 *
+	 * @var string|null
+	 */
+	private static ?string $log_level = null;
 
-    /**
-     * Check if the message should be logged based on settings.
-     *
-     * @param string $level The log level being attempted.
-     * @return bool
-     */
-    private static function should_log(string $level): bool
-    {
-        $debug_mode = get_option('detit_debug_mode', false);
-        if (!$debug_mode) {
-            return false;
-        }
+	/**
+	 * Log an error message.
+	 *
+	 * @param string $message Log message.
+	 * @param array  $context Structured context.
+	 * @return void
+	 */
+	public static function error( string $message, array $context = array() ): void {
+		if ( ! self::should_log( 'error' ) ) {
+			return;
+		}
 
-        $threshold = get_option('detit_log_level', 'error');
+		self::write_log( 'error', $message, $context );
+	}
 
-        $levels = [
-            'error'   => 1,
-            'warning' => 2,
-            'info'    => 3,
-            'debug'   => 4,
-        ];
+	/**
+	 * Log a warning message.
+	 *
+	 * @param string $message Log message.
+	 * @param array  $context Structured context.
+	 * @return void
+	 */
+	public static function warning( string $message, array $context = array() ): void {
+		if ( ! self::should_log( 'warning' ) ) {
+			return;
+		}
 
-        $threshold_value = $levels[$threshold] ?? 1;
-        $level_value = $levels[$level] ?? 1;
+		self::write_log( 'warning', $message, $context );
+	}
 
-        return $level_value <= $threshold_value;
-    }
+	/**
+	 * Log an info message.
+	 *
+	 * @param string $message Log message.
+	 * @param array  $context Structured context.
+	 * @return void
+	 */
+	public static function info( string $message, array $context = array() ): void {
+		if ( ! self::should_log( 'info' ) ) {
+			return;
+		}
 
-    /**
-     * Sanitize context by removing sensitive fields and truncating size.
-     *
-     * @param array $context
-     * @return array
-     */
-    private static function sanitize_context(array $context): array
-    {
-        $sensitive_keys = ['password', 'token', 'secret', 'api_key', 'authorization', 'nonce'];
+		self::write_log( 'info', $message, $context );
+	}
 
-        $sanitized = [];
-        $count = 0;
+	/**
+	 * Log a debug message.
+	 *
+	 * @param string $message Log message.
+	 * @param array  $context Structured context.
+	 * @return void
+	 */
+	public static function debug( string $message, array $context = array() ): void {
+		if ( ! self::should_log( 'debug' ) ) {
+			return;
+		}
 
-        foreach ($context as $key => $value) {
-            if ($count >= 10) {
-                $sanitized['__truncated'] = true;
-                break;
-            }
+		self::write_log( 'debug', $message, $context );
+	}
 
-            $is_sensitive = false;
-            foreach ($sensitive_keys as $sensitive_key) {
-                if (stripos((string) $key, $sensitive_key) !== false) {
-                    $is_sensitive = true;
-                    break;
-                }
-            }
+	/**
+	 * Determine whether the requested level should be logged.
+	 *
+	 * @param string $level Requested log level.
+	 * @return bool
+	 */
+	private static function should_log( string $level ): bool {
+		if ( ! isset( self::$levels[ $level ] ) ) {
+			return false;
+		}
 
-            if (!$is_sensitive) {
-                $sanitized[$key] = is_scalar($value) || is_null($value) ? $value : wp_json_encode($value);
-                $count++;
-            } else {
-                $sanitized[$key] = '[REDACTED]';
-                $count++;
-            }
-        }
+		if ( null === self::$debug_mode ) {
+			self::$debug_mode = (bool) get_option( 'detit_debug_mode', false );
+		}
 
-        return $sanitized;
-    }
+		if ( ! self::$debug_mode ) {
+			return false;
+		}
 
-    /**
-     * Automatically attach system metadata.
-     *
-     * @param array $context
-     * @return array
-     */
-    private static function enrich_context(array $context): array
-    {
-        $request_type = 'frontend';
+		if ( null === self::$log_level ) {
+			$stored_level = (string) get_option( 'detit_log_level', 'error' );
+			self::$log_level = isset( self::$levels[ $stored_level ] ) ? $stored_level : 'error';
+		}
 
-        if (defined('WP_CLI') && constant('WP_CLI')) {
-            $request_type = 'cli';
-        } elseif (wp_doing_cron()) {
-            $request_type = 'cron';
-        } elseif (wp_doing_ajax()) {
-            $request_type = 'ajax';
-        } elseif (is_admin()) {
-            $request_type = 'admin';
-        }
+		return self::$levels[ $level ] <= self::$levels[ self::$log_level ];
+	}
 
-        $enrichment = [
-            'plugin_version' => defined('DETIT_VERSION') ? constant('DETIT_VERSION') : 'unknown',
-            'wp_version'     => get_bloginfo('version'),
-            'php_version'    => phpversion(),
-            'environment'    => wp_get_environment_type(),
-            'request_type'   => $request_type,
-            'memory_usage'   => size_format(memory_get_usage(true)),
-        ];
+	/**
+	 * Sanitize logging context.
+	 *
+	 * Removes sensitive keys and limits user-provided context to 10 keys.
+	 *
+	 * @param array $context Raw log context.
+	 * @return array
+	 */
+	private static function sanitize_context( array $context ): array {
+		$sanitized = array();
 
-        $correlation_id = Correlation::get_id();
-        if ($correlation_id) {
-            $enrichment['run_id'] = $correlation_id;
-        }
+		foreach ( $context as $key => $value ) {
+			$normalized_key = is_string( $key ) ? $key : (string) $key;
 
-        return array_merge($enrichment, $context);
-    }
+			if ( self::is_sensitive_key( $normalized_key ) ) {
+				continue;
+			}
 
-    /**
-     * Write the log to WooCommerce logger or fallback.
-     *
-     * @param string $level
-     * @param string $message
-     * @param array $context
-     */
-    private static function write_log(string $level, string $message, array $context): void
-    {
-        $sanitized_context = self::sanitize_context($context);
-        $enriched_context = self::enrich_context($sanitized_context);
-        $enriched_context['source'] = 'detit';
+			if ( 10 <= count( $sanitized ) ) {
+				break;
+			}
 
-        if (class_exists('WooCommerce') && function_exists('wc_get_logger')) {
-            $logger = wc_get_logger();
-            if ($logger) {
-                $logger->log($level, $message, $enriched_context);
-                return;
-            }
-        }
+			$sanitized[ $normalized_key ] = self::sanitize_value( $normalized_key, $value );
+		}
 
-        // Fallback to error_log
-        $log_entry = sprintf(
-            "[DetIt][%s] %s | Context: %s",
-            strtoupper($level),
-            $message,
-            wp_json_encode($enriched_context)
-        );
+		return $sanitized;
+	}
 
-        error_log($log_entry);
-    }
+	/**
+	 * Enrich a log context with environment metadata.
+	 *
+	 * @param array $context Sanitized log context.
+	 * @return array
+	 */
+	private static function enrich_context( array $context ): array {
+		$enriched_context = array(
+			'plugin_version' => defined( 'DETIT_VERSION' ) ? DETIT_VERSION : 'unknown',
+			'wp_version'     => get_bloginfo( 'version' ),
+			'php_version'    => phpversion(),
+			'environment'    => wp_get_environment_type(),
+			'request_type'   => self::get_request_type(),
+			'memory_usage'   => memory_get_usage( true ),
+		);
+
+		$run_id = Correlation::get_id();
+
+		if ( ! empty( $run_id ) && ! isset( $context['run_id'] ) ) {
+			$enriched_context['run_id'] = $run_id;
+		}
+
+		return array_merge( $enriched_context, $context );
+	}
+
+	/**
+	 * Write a log entry to the available logger.
+	 *
+	 * @param string $level Log level.
+	 * @param string $message Log message.
+	 * @param array  $context Raw log context.
+	 * @return void
+	 */
+	private static function write_log( string $level, string $message, array $context ): void {
+		$context           = self::enrich_context( self::sanitize_context( $context ) );
+		$logger_context    = array_merge( $context, array( 'source' => self::SOURCE ) );
+		$encoded_context   = wp_json_encode( $context );
+		$fallback_message  = sprintf( '[DetIt][%s] %s %s', $level, $message, $encoded_context );
+
+		if ( function_exists( 'wc_get_logger' ) ) {
+			$logger = wc_get_logger();
+
+			if ( is_object( $logger ) && method_exists( $logger, $level ) ) {
+				$logger->{$level}( $message, $logger_context );
+				return;
+			}
+		}
+
+		error_log( $fallback_message );
+	}
+
+	/**
+	 * Determine whether a context key is sensitive.
+	 *
+	 * @param string $key Context key.
+	 * @return bool
+	 */
+	private static function is_sensitive_key( string $key ): bool {
+		$sensitive_fragments = array(
+			'password',
+			'token',
+			'secret',
+			'api_key',
+			'authorization',
+			'nonce',
+		);
+
+		foreach ( $sensitive_fragments as $fragment ) {
+			if ( false !== stripos( $key, $fragment ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Sanitize a context value for safe logging.
+	 *
+	 * @param string $key Context key.
+	 * @param mixed  $value Context value.
+	 * @return mixed
+	 */
+	private static function sanitize_value( string $key, $value ) {
+		if ( is_scalar( $value ) || null === $value ) {
+			if ( is_string( $value ) ) {
+				if ( self::contains_restricted_data( $key ) ) {
+					return '[omitted]';
+				}
+
+				if ( 200 < strlen( $value ) ) {
+					return '[string_length:' . strlen( $value ) . ']';
+				}
+			}
+
+			return $value;
+		}
+
+		if ( is_array( $value ) ) {
+			return array(
+				'count' => count( $value ),
+			);
+		}
+
+		if ( is_object( $value ) ) {
+			if ( method_exists( $value, 'get_id' ) ) {
+				return (int) $value->get_id();
+			}
+
+			if ( $value instanceof \WP_Post ) {
+				return (int) $value->ID;
+			}
+
+			return get_class( $value );
+		}
+
+		return gettype( $value );
+	}
+
+	/**
+	 * Determine whether a context key may hold restricted content.
+	 *
+	 * @param string $key Context key.
+	 * @return bool
+	 */
+	private static function contains_restricted_data( string $key ): bool {
+		$restricted_fragments = array(
+			'content',
+			'description',
+			'customer',
+			'email',
+			'address',
+			'phone',
+		);
+
+		foreach ( $restricted_fragments as $fragment ) {
+			if ( false !== stripos( $key, $fragment ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Detect the current request type.
+	 *
+	 * @return string
+	 */
+	private static function get_request_type(): string {
+		if ( defined( 'WP_CLI' ) && WP_CLI ) {
+			return 'cli';
+		}
+
+		if ( wp_doing_cron() ) {
+			return 'cron';
+		}
+
+		if ( wp_doing_ajax() ) {
+			return 'ajax';
+		}
+
+		if ( is_admin() ) {
+			return 'admin';
+		}
+
+		return 'frontend';
+	}
 }
