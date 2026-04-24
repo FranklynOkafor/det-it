@@ -32,13 +32,10 @@ class ScoreEngine
             ];
         }
 
-        // 1. Remove duplicate issue IDs
         $issues = array_unique($issues);
 
-        // 2. Sort issue IDs alphabetically to ensure deterministic output
         sort($issues);
 
-        // 3. Load issue registry
         $registry = require __DIR__ . '/issue_registry.php';
 
         $deductions = 0;
