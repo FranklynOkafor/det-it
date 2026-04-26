@@ -34,7 +34,6 @@ class Loader
         \DetIt\SeoAudit\boot();
 
         // Meta Module
-        require_once DETIT_PLUGIN_DIR . 'includes/meta-module/meta-engine.php';
         require_once DETIT_PLUGIN_DIR . 'includes/meta-module/bootstrap.php';
         \DetIt\Meta\boot();
 
@@ -88,16 +87,8 @@ class Loader
         }
 
         // Public hooks
-        if (!is_admin()) {
 
-            $meta = new \DetIt\Meta\MetaEngine();
 
-            self::add_action(
-                'wp_head',
-                $meta,
-                'inject_meta_tags'
-            );
-        }
     }
 
     private static function run(): void

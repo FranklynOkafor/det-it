@@ -24,7 +24,7 @@ class ProductAuditService
 
         $data = $this->get_product_data($product);
 
-        $issue_ids = [];
+        $issues = [];
 
         $checkers = $this->get_checkers();
 

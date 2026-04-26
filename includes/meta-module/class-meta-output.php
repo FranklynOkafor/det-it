@@ -149,25 +149,5 @@ class Meta_Output
     );
   }
 
-  /**
-   * Output <meta name="keywords"> tag.
-   *
-   * Note: Google ignores this tag but some other search engines still
-   * read it, and it is useful for internal auditing purposes.
-   *
-   * @param  int $product_id
-   * @return void
-   */
-  // private static function output_meta_keywords( int $product_id ): void {
-  //     $keyword = Meta_Handler::get_focus_keyword( $product_id );
 
-  //     if ( '' === $keyword ) {
-  //         return;
-  //     }
-
-  //     printf(
-  //         '<meta name="keywords" content="%s" />' . "\n",
-  //         esc_attr( $keyword )
-  //     );
-  // }
 }
