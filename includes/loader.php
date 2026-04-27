@@ -22,9 +22,6 @@ class Loader
         require_once DETIT_PLUGIN_DIR . 'includes/Support/Timer.php';
         require_once DETIT_PLUGIN_DIR . 'includes/Support/Logger.php';
 
-        // Settings
-        require_once DETIT_PLUGIN_DIR . 'includes/Admin/Settings/LoggingSettings.php';
-
         // Content Generation
         require_once DETIT_PLUGIN_DIR . 'includes/content-generation/bootstrap.php';
         \DetIt\ContentGenerator\boot();
@@ -34,13 +31,18 @@ class Loader
         \DetIt\SeoAudit\boot();
 
         // Meta Module
-        require_once DETIT_PLUGIN_DIR . 'includes/meta-module/bootstrap.php';
-        \DetIt\Meta\boot();
+        // require_once DETIT_PLUGIN_DIR . 'includes/meta-module/bootstrap.php';
+        // \DetIt\Meta\boot();
 
         // Admin
+        require_once DETIT_PLUGIN_DIR . 'admin/onboarding/onboarding-fields.php';
+        require_once DETIT_PLUGIN_DIR . 'admin/onboarding/onboarding-save.php';
+        require_once DETIT_PLUGIN_DIR . 'admin/onboarding/onboarding-controller.php';
         require_once DETIT_PLUGIN_DIR . 'admin/dashboard.php';
         require_once DETIT_PLUGIN_DIR . 'admin/product-panel.php';
         require_once DETIT_PLUGIN_DIR . 'admin/bulk-tools.php';
+        require_once DETIT_PLUGIN_DIR . 'admin/Settings/LoggingSettings.php';
+
 
         // API
         require_once DETIT_PLUGIN_DIR . 'api/audit-endpoint.php';
@@ -101,7 +103,6 @@ class Loader
                 $hook['priority'],
                 $hook['accepted_args']
             );
-
         }
 
         foreach (self::$filters as $hook) {
@@ -112,7 +113,6 @@ class Loader
                 $hook['priority'],
                 $hook['accepted_args']
             );
-
         }
     }
 }

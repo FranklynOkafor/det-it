@@ -44,7 +44,6 @@ function detit_init()
   require_once DETIT_PLUGIN_DIR . 'includes/loader.php';
   require_once DETIT_PLUGIN_DIR . 'includes/plugin.php';
 
-  \DetIt\Loader::init();
   function run_detit()
   {
 
@@ -112,6 +111,8 @@ function detit_activate()
 
   require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
   dbDelta($sql);
+
+  set_transient('detit_activation_redirect', true, 30);
 }
 
 register_activation_hook(__FILE__, 'detit_activate');
@@ -128,3 +129,13 @@ register_deactivation_hook(__FILE__, 'detit_deactivate');
 
 
 // UI code safely migrated to wrapped admin OOP classes.
+
+add_action('admin_init', function() {
+    if (get_transient('detit_activation_redirect')) {
+        delete_transient('detit_activation_redirect');
+        if (!isset($_GET['activate-multi'])) {
+            wp_safe_redirect(admin_url('admin.php?page=detit-dashboard'));
+            exit;
+        }
+    }
+});
