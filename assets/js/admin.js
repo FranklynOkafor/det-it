@@ -3,7 +3,6 @@ jQuery(document).ready(function ($) {
     const button = $(this);
     const productId = button.data("product-id");
     const responseBox = $("#detit-response");
-    
 
     if (!productId) return;
 
@@ -18,9 +17,11 @@ jQuery(document).ready(function ($) {
         nonce: detitData.nonce,
       },
       success: function (res) {
+        console.log(res);
+
         if (res.success) {
-          responseBox.html(
-            '<p style="color:green;">' + res.data.message + "</p>",
+          $("#detit-response").html(
+            "<pre>" + JSON.stringify(res.data.context, null, 2) + "</pre>",
           );
         } else {
           responseBox.html(

@@ -15,9 +15,13 @@ if (! defined('ABSPATH')) {
   exit;
 }
 
+require_once __DIR__ . '/DataCollector.php';
+require_once __DIR__ . '/ContextBuilder.php';
 require_once __DIR__ . '/generator-engine.php';
 require_once __DIR__ . '/prompt-builder.php';
 require_once __DIR__ . '/response-parser.php';
+
+
 
 
 
