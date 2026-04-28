@@ -2,6 +2,10 @@
 
 namespace DetIt;
 
+use Detit\Admin\ProductMetaBox;
+use Detit\Admin\AdminAssets;
+use Detit\Admin\AjaxHandler;
+
 class Loader
 {
 
@@ -30,9 +34,15 @@ class Loader
         require_once DETIT_PLUGIN_DIR . 'includes/seo-audit/bootstrap.php';
         \DetIt\SeoAudit\boot();
 
-        // Meta Module
-        // require_once DETIT_PLUGIN_DIR . 'includes/meta-module/bootstrap.php';
-        // \DetIt\Meta\boot();
+        // Admin Actions
+        require_once DETIT_PLUGIN_DIR . 'admin/AdminAssets.php';
+        require_once DETIT_PLUGIN_DIR . 'admin/AjaxHandler.php';
+        require_once DETIT_PLUGIN_DIR . 'admin/ProductMetaBox.php';
+
+        new \DetIt\Admin\ProductMetaBox();
+        new \DetIt\Admin\AdminAssets();
+        new \DetIt\Admin\AjaxHandler();
+
 
         // Admin
         require_once DETIT_PLUGIN_DIR . 'admin/onboarding/onboarding-fields.php';
