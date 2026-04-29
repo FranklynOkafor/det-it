@@ -86,11 +86,48 @@ class DataCollector {
 
     public function get_store_data() {
 
-    return [
-        'store_name'        => get_option('detit_store_name', ''),
-        'store_description' => get_option('detit_store_description', ''),
-        'target_audience'   => get_option('detit_target_audience', ''),
-        'tone'              => get_option('detit_tone', ''),
-    ];
-}
+        $settings = get_option('detit_onboarding_settings', []);
+        
+        if (!is_array($settings)) {
+            $settings = [];
+        }
+
+        $store_name = $settings['store_name'] ?? '';
+        
+        // Determine industry/niche
+        $industry = $settings['industry_niche'] ?? '';
+        if ($industry === 'other' && !empty($settings['industry_niche_custom'])) {
+            $industry = $settings['industry_niche_custom'];
+        }
+
+        // Determine store type
+        $store_type = $settings['store_type'] ?? '';
+
+        // Build a store description based on onboarding fields
+        $desc_parts = [];
+        if ($store_type) {
+            $desc_parts[] = ucfirst($store_type) . ' store';
+        }
+        if ($industry) {
+            $desc_parts[] = 'in the ' . str_replace('_', ' ', $industry) . ' industry';
+        }
+        $store_description = implode(' ', $desc_parts);
+
+        // Determine target audience
+        $audience_type = $settings['target_audience_type'] ?? '';
+        if ($audience_type === 'other' && !empty($settings['target_audience_type_custom'])) {
+            $audience_type = $settings['target_audience_type_custom'];
+        }
+        $audience_detail = $settings['target_audience_detail'] ?? '';
+        $target_audience = trim(str_replace('_', ' ', $audience_type) . ' ' . $audience_detail);
+
+        $tone = $settings['content_tone'] ?? '';
+
+        return [
+            'store_name'        => $store_name,
+            'store_description' => $store_description,
+            'target_audience'   => $target_audience,
+            'tone'              => $tone,
+        ];
+    }
 }
