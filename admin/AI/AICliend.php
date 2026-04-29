@@ -55,14 +55,14 @@ class GeminiClient
                 ],
             ],
             'generationConfig' => [
-                'responseMimeType' => 'application/json',  // Forces clean JSON output
+                'responseMimeType' => 'application/json',
                 'temperature'      => 0.4,
-                'maxOutputTokens'  => 1024,
+                'maxOutputTokens'  => 4096,
             ],
         ]);
 
         $response = wp_remote_post($url, [
-            'timeout' => 60,
+            'timeout' => 45,
             'headers' => [
                 'Content-Type' => 'application/json',
             ],

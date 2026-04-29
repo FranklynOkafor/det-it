@@ -2,8 +2,7 @@
 
 namespace Detit\Admin;
 
-use Detit\ContentGenerator\DataCollector;
-use Detit\ContentGenerator\ContextBuilder;
+use Detit\ContentGenerator\ContentGenerator;
 
 if (!defined('ABSPATH')) exit;
 
@@ -17,6 +16,8 @@ class AjaxHandler
 
     public function handle()
     {
+        // Allow enough time for the Gemini API round-trip
+        set_time_limit(120);
 
         check_ajax_referer('detit_nonce', 'nonce');
 
@@ -26,23 +27,16 @@ class AjaxHandler
             wp_send_json_error(['message' => 'Invalid product ID']);
         }
 
-        $collector = new DataCollector();
-        $builder   = new ContextBuilder();
+        try {
+            $generator = new ContentGenerator();
+            $result    = $generator->generate($product_id);
 
-        $product_data = $collector->get_product_data($product_id);
-        $store_data   = $collector->get_store_data();
+            wp_send_json_success([
+                'result' => $result,
+            ]);
 
-        if (!$product_data) {
-            wp_send_json_error(['message' => 'Product not found']);
+        } catch (\RuntimeException $e) {
+            wp_send_json_error(['message' => $e->getMessage()]);
         }
-
-        $context = $builder->build($product_data, $store_data);
-
-        // Return context + the resolved prompt so the JS layer (and later
-        // the AI client) can see exactly what will be sent.
-        wp_send_json_success([
-            'context' => $context,
-            'prompt'  => $context['prompt'],
-        ]);
     }
 }

@@ -17,15 +17,18 @@ jQuery(document).ready(function ($) {
         nonce: detitData.nonce,
       },
       success: function (res) {
-        console.log(res);
-
         if (res.success) {
-          $("#detit-response").html(
-            "<pre>" + JSON.stringify(res.data.context, null, 2) + "</pre>",
-          );
+          var r = res.data.result;
+          var html =
+            '<p style="color:green;font-weight:bold;">✓ Content generated!</p>' +
+            '<p><strong>Title:</strong> ' + r.title + "</p>" +
+            '<p><strong>Short Desc:</strong> ' + r.short_description + "</p>" +
+            '<p><strong>SEO Title:</strong> ' + r.seo.meta_title + "</p>" +
+            '<p><strong>Focus Keyword:</strong> ' + r.seo.focus_keyword + "</p>";
+          responseBox.html(html);
         } else {
           responseBox.html(
-            '<p style="color:red;">Error processing request</p>',
+            '<p style="color:red;">' + (res.data.message || "Error processing request") + "</p>",
           );
         }
       },
