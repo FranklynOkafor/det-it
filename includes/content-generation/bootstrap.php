@@ -17,11 +17,12 @@ if (! defined('ABSPATH')) {
 
 require_once __DIR__ . '/DataCollector.php';
 require_once __DIR__ . '/ContextBuilder.php';
-require_once __DIR__ . '/generator-engine.php';
-require_once __DIR__ . '/prompt-builder.php';
-require_once __DIR__ . '/response-parser.php';
 
-
+// New AI components
+require_once DETIT_PLUGIN_DIR . 'admin/AI/OutputSchema.php';
+require_once DETIT_PLUGIN_DIR . 'admin/AI/PromptBuilder.php';
+require_once DETIT_PLUGIN_DIR . 'admin/AI/AICliend.php';
+require_once DETIT_PLUGIN_DIR . 'admin/AI/ContentGenerator.php';
 
 
 
