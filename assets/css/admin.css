@@ -1,0 +1,158 @@
+.detit-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.detit-modal-overlay.detit-open {
+    opacity: 1;
+    visibility: visible;
+}
+
+.detit-modal {
+    background: #fff;
+    width: 600px;
+    max-width: 90%;
+    max-height: 90vh;
+    border-radius: 4px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.detit-modal-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #fcfcfc;
+}
+
+.detit-modal-header h2 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.detit-close-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    line-height: 1;
+    color: #666;
+}
+
+.detit-close-btn:hover {
+    color: #d00;
+}
+
+.detit-modal-body {
+    padding: 20px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.detit-field-row {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.detit-field-row label {
+    font-weight: 600;
+    margin-bottom: 8px;
+    text-transform: capitalize;
+}
+
+.detit-input-wrapper {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.detit-input,
+.detit-textarea {
+    flex: 1;
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.detit-textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.detit-action-btn {
+    padding: 8px 16px;
+    background: #007cba;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 14px;
+    height: 35px;
+    white-space: nowrap;
+    transition: background 0.2s ease;
+}
+
+.detit-action-btn:hover:not(:disabled) {
+    background: #006ba1;
+}
+
+.detit-action-btn:disabled {
+    background: #a0a5aa;
+    cursor: not-allowed;
+}
+
+.detit-action-btn.detit-success {
+    background: #46b450;
+}
+
+.detit-modal-footer {
+    padding: 16px 20px;
+    border-top: 1px solid #ddd;
+    text-align: right;
+    background: #fcfcfc;
+}
+
+.detit-spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    border-top-color: #007cba;
+    animation: detit-spin 1s ease-in-out infinite;
+    margin-left: 10px;
+    vertical-align: middle;
+}
+
+@keyframes detit-spin {
+    to { transform: rotate(360deg); }
+}
+
+.detit-feedback {
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+.detit-feedback.detit-error {
+    color: #d00;
+}

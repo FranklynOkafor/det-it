@@ -1,20 +1,20 @@
 {
-    "title": "Lightweight Adjustable Trekking Poles for Hiking & Walking",
-    "short_description": "Enhance your outdoor adventures with our lightweight and adjustable trekking poles. Designed for stability and comfort, they provide essential support on any trail.",
-    "description": "<p>Discover enhanced stability and comfort on your outdoor excursions with Reynox's premium Trekking Poles. Engineered for durability and ease of use, these poles are an essential companion for hikers, walkers, and adventurers of all levels. Whether you're navigating challenging mountain trails or enjoying a leisurely walk, our trekking poles provide reliable support, reducing strain on your joints and improving your balance.</p><p>Key features include:</p><ul><li><strong>Lightweight Design:</strong> Crafted from high-quality materials, ensuring easy portability without compromising strength.</li><li><strong>Adjustable Height:</strong> Easily customise the pole length to suit your height and the terrain, offering optimal ergonomic support.</li><li><strong>Comfortable Grip:</strong> Ergonomically designed handles provide a secure and comfortable hold, even during long treks.</li><li><strong>Durable Construction:</strong> Built to withstand diverse outdoor conditions, offering long-lasting performance.</li></ul><p>Invest in your outdoor comfort and safety. These bestselling trekking poles are a budget-friendly choice for superior performance.</p>",
+    "title": "Premium Non-Slip Yoga Mat - Eco-Friendly & Durable",
+    "short_description": "Elevate your practice with our premium non-slip yoga mat. Designed for superior grip and comfort, it's durable, eco-friendly, and perfect for all fitness levels.",
+    "description": "<p>Discover the ideal foundation for your practice with Reynox's <strong>Premium Non-Slip Yoga Mat</strong>. Engineered for stability and comfort, this mat provides the perfect grip you need for every pose, from challenging inversions to relaxing stretches. Its durable construction ensures long-lasting performance, making it a reliable choice for daily use in your home or studio.</p><p>Our yoga mat is crafted with both your practice and the planet in mind. It's an <strong>eco-friendly</strong> option that doesn't compromise on quality or feel. Lightweight and easy to roll, it's also highly <strong>portable</strong>, allowing you to take your practice wherever you go. Whether you're a beginner or an experienced yogi, this mat offers the support and cushioning required for a comfortable and effective workout.</p><ul><li><strong>Superior Non-Slip Surface:</strong> Ensures excellent grip and stability during all poses.</li><li><strong>Eco-Friendly Material:</strong> Mindfully produced for a sustainable choice.</li><li><strong>Optimal Comfort & Support:</strong> Provides cushioning for joints and a comfortable practice.</li><li><strong>Durable & Long-Lasting:</strong> Built to withstand regular use and maintain its quality.</li><li><strong>Lightweight & Portable:</strong> Easy to transport and store, ideal for on-the-go fitness.</li></ul><p>Invest in a yoga mat that supports your journey towards wellness and mindfulness. Experience the Reynox difference with a mat designed for performance, comfort, and sustainability.</p>",
     "seo": {
-        "meta_title": "Lightweight Trekking Poles | Adjustable Hiking Sticks - Reynox",
-        "meta_description": "Enhance your outdoor adventures with Reynox's lightweight and adjustable trekking poles. Improve stability, reduce strain, and explore confidently. Shop now!",
-        "focus_keyword": "Trekking Poles"
+        "meta_title": "Yoga Mat - Premium Non-Slip & Eco-Friendly | Reynox",
+        "meta_description": "Discover our premium non-slip yoga mat, perfect for all practices. Durable, eco-friendly, and comfortable. Shop the best yoga mats at Reynox today!",
+        "focus_keyword": "Yoga Mat"
     },
     "tags": [
-        "bestseller",
-        "budget",
-        "lightweight",
-        "new",
-        "hiking poles",
-        "walking sticks",
-        "outdoor gear",
-        "adjustable poles"
+        "yoga mat",
+        "non-slip",
+        "eco-friendly",
+        "fitness",
+        "exercise",
+        "meditation",
+        "portable",
+        "durable"
     ]
 }

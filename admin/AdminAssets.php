@@ -32,6 +32,13 @@ class AdminAssets
             true
         );
 
+        wp_enqueue_style(
+            'detit-admin',
+            DETIT_PLUGIN_URL . 'assets/css/admin.css',
+            [],
+            '1.0'
+        );
+
         wp_localize_script('detit-admin', 'detitData', [
             'ajax_url' => admin_url('admin-ajax.php'),
             'nonce'    => wp_create_nonce('detit_nonce')
