@@ -1,20 +1,18 @@
 {
-    "title": "Premium Non-Slip Yoga Mat - Eco-Friendly & Durable",
-    "short_description": "Elevate your practice with our premium non-slip yoga mat. Designed for superior grip and comfort, it's durable, eco-friendly, and perfect for all fitness levels.",
-    "description": "<p>Discover the ideal foundation for your practice with Reynox's <strong>Premium Non-Slip Yoga Mat</strong>. Engineered for stability and comfort, this mat provides the perfect grip you need for every pose, from challenging inversions to relaxing stretches. Its durable construction ensures long-lasting performance, making it a reliable choice for daily use in your home or studio.</p><p>Our yoga mat is crafted with both your practice and the planet in mind. It's an <strong>eco-friendly</strong> option that doesn't compromise on quality or feel. Lightweight and easy to roll, it's also highly <strong>portable</strong>, allowing you to take your practice wherever you go. Whether you're a beginner or an experienced yogi, this mat offers the support and cushioning required for a comfortable and effective workout.</p><ul><li><strong>Superior Non-Slip Surface:</strong> Ensures excellent grip and stability during all poses.</li><li><strong>Eco-Friendly Material:</strong> Mindfully produced for a sustainable choice.</li><li><strong>Optimal Comfort & Support:</strong> Provides cushioning for joints and a comfortable practice.</li><li><strong>Durable & Long-Lasting:</strong> Built to withstand regular use and maintain its quality.</li><li><strong>Lightweight & Portable:</strong> Easy to transport and store, ideal for on-the-go fitness.</li></ul><p>Invest in a yoga mat that supports your journey towards wellness and mindfulness. Experience the Reynox difference with a mat designed for performance, comfort, and sustainability.</p>",
+    "title": "Premium Grey Wool Sweatshirt | Everyday Comfort & Durability",
+    "short_description": "Discover year-round comfort with our premium grey wool sweatshirt. Its soft texture and versatile design make it ideal for any season or occasion.",
+    "description": "<p>Experience unparalleled comfort and sophisticated style with the Reynox <strong>Premium Grey Wool Sweatshirt</strong>. Expertly crafted from 100% pure wool, this essential garment offers an exceptionally soft and cozy feel against your skin, making it a cornerstone of your wardrobe.</p><p>Designed for true <strong>everyday comfort</strong>, its natural breathability ensures optimal wear across all seasons. Enjoy comforting warmth during cooler months and a light, airy sensation on milder evenings, adapting effortlessly to your environment.</p><p>This <strong>versatile wool sweatshirt</strong> transitions seamlessly from casual outings to more refined settings. Pair it with your favorite jeans for a relaxed look, or layer it over a collared shirt for smart-casual elegance. Its <strong>durable</strong> construction guarantees lasting quality, making it a reliable choice for years to come.</p><p><strong>Effortless Maintenance:</strong></p><ul><li>Features hybrid washability for convenient machine or gentle hand washing.</li><li>For ironing, use a moderate temperature to preserve the wool fabric's integrity and softness.</li></ul>",
     "seo": {
-        "meta_title": "Yoga Mat - Premium Non-Slip & Eco-Friendly | Reynox",
-        "meta_description": "Discover our premium non-slip yoga mat, perfect for all practices. Durable, eco-friendly, and comfortable. Shop the best yoga mats at Reynox today!",
-        "focus_keyword": "Yoga Mat"
+        "meta_title": "Premium Grey Wool Sweatshirt | Everyday Comfort & Style",
+        "meta_description": "Experience ultimate comfort and versatility with the Reynox Premium Grey Wool Sweatshirt. Crafted for durability and year-round wear. Shop now for lasting quality.",
+        "focus_keyword": "Premium Grey Wool Sweatshirt"
     },
     "tags": [
-        "yoga mat",
-        "non-slip",
-        "eco-friendly",
-        "fitness",
-        "exercise",
-        "meditation",
-        "portable",
-        "durable"
+        "comfort",
+        "durable",
+        "everyday wear",
+        "premium",
+        "wool sweatshirt",
+        "versatile"
     ]
 }
