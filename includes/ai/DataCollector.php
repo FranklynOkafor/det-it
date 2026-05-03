@@ -86,7 +86,7 @@ class DataCollector {
 
     public function get_store_data() {
 
-        $settings = get_option('detit_onboarding_settings', []);
+        $settings = get_option('detit_context', []);
         
         if (!is_array($settings)) {
             $settings = [];
@@ -103,7 +103,7 @@ class DataCollector {
         // Determine store type
         $store_type = $settings['store_type'] ?? '';
 
-        // Build a store description based on onboarding fields
+        // Build a store description based on context settings
         $desc_parts = [];
         if ($store_type) {
             $desc_parts[] = ucfirst($store_type) . ' store';

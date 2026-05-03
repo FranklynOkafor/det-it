@@ -12,9 +12,9 @@ class Dashboard
     {
         add_menu_page(
             'DetIt Settings',        // Page title
-            'DetIt',                 // Menu title
+            'DetIt Settings',        // Menu title
             'manage_options',        // Capability
-            'detit-dashboard',       // Slug
+            'detit-settings',        // Slug
             [$this, 'render'],       // Callback
             'dashicons-edit',        // Icon
             25                       // Position
@@ -23,12 +23,11 @@ class Dashboard
 
     public function render()
     {
-        // First handle any onboarding form submissions
-        $onboarding = new \DetIt\Admin\Onboarding\detit_Onboarding_Controller();
-        $onboarding->handle_submit();
+        // First handle any settings form submissions
+        $settings = new \DetIt\Admin\Settings\DetIt_Settings_Page();
+        $settings->handle_submit();
 
-        // Render the onboarding/settings page
-        // The controller will dynamically adjust titles based on completion status
-        $onboarding->render_page();
+        // Render the settings page
+        $settings->render_page();
     }
 }

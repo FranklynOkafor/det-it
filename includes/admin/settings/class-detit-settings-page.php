@@ -1,43 +1,49 @@
 <?php
+/**
+ * DetIt Settings Page Controller
+ *
+ * @package DetIt
+ */
 
-namespace DetIt\Admin\Onboarding;
+namespace DetIt\Admin\Settings;
 
 if (!defined('ABSPATH')) {
     exit;
 }
 
-class detit_Onboarding_Controller
+class DetIt_Settings_Page
 {
     public function handle_submit()
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['detit_onboarding_submit'])) {
-            $was_completed = detit_is_onboarding_completed();
-            $success = detit_save_onboarding($_POST);
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['detit_settings_submit'])) {
+            $success = DetIt_Settings_Save::save($_POST);
             if ($success) {
-                $msg = $was_completed ? 'Settings saved successfully.' : 'Onboarding completed successfully. Welcome to your dashboard!';
-                echo '<div class="notice notice-success is-dismissible"><p>' . esc_html($msg) . '</p></div>';
+                echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__('Settings saved successfully.', 'detit') . '</p></div>';
             } else {
-                echo '<div class="notice notice-error is-dismissible"><p>There was an error saving your settings.</p></div>';
+                echo '<div class="notice notice-error is-dismissible"><p>' . esc_html__('There was an error saving your settings.', 'detit') . '</p></div>';
             }
         }
     }
 
     public function render_page()
     {
-        $schema = require __DIR__ . '/onboarding-fields.php';
-        $values = detit_get_onboarding_settings();
-        $is_completed = detit_is_onboarding_completed();
-
-        $title = $is_completed ? 'DetIt Settings' : 'DetIt Setup';
-        $desc = $is_completed ? 'Update your DetIt store settings below.' : 'Please complete the onboarding process to tailor DetIt to your store.';
-        $button_text = $is_completed ? 'Save Settings' : 'Complete Setup';
+        $schema = DetIt_Settings_Fields::get_fields();
+        $values = self::get_context();
+        
+        $title = __('Content Context Settings', 'detit');
+        $desc = __('Configure your store context to improve AI-generated product content.', 'detit');
+        $button_text = __('Save Settings', 'detit');
 
         echo '<div class="wrap">';
         echo '<h1>' . esc_html($title) . '</h1>';
         echo '<p>' . esc_html($desc) . '</p>';
+        
+        // Disclosure Notice
+        echo '<div class="notice notice-info inline"><p>' . esc_html__('This information is used to improve AI-generated product content. No data is sent externally without user action.', 'detit') . '</p></div>';
+
         echo '<form method="post" action="">';
         
-        wp_nonce_field('detit_onboarding', 'detit_onboarding_nonce');
+        wp_nonce_field('detit_settings', 'detit_settings_nonce');
 
         echo '<table class="form-table" role="presentation">';
         echo '<tbody>';
@@ -50,7 +56,7 @@ class detit_Onboarding_Controller
         echo '</table>';
 
         echo '<p class="submit">';
-        echo '<input type="submit" name="detit_onboarding_submit" id="submit" class="button button-primary" value="' . esc_attr($button_text) . '">';
+        echo '<input type="submit" name="detit_settings_submit" id="submit" class="button button-primary" value="' . esc_attr($button_text) . '">';
         echo '</p>';
 
         echo '</form>';
@@ -60,7 +66,7 @@ class detit_Onboarding_Controller
         ?>
         <script type="text/javascript">
             document.addEventListener("DOMContentLoaded", function() {
-                var selectWithOther = document.querySelectorAll('select.DetIt-onboarding-select-with-other');
+                var selectWithOther = document.querySelectorAll('select.detit-settings-select-with-other');
                 selectWithOther.forEach(function(select) {
                     var otherInputId = select.id + '_custom_container';
                     var otherInput = document.getElementById(otherInputId);
@@ -93,7 +99,7 @@ class detit_Onboarding_Controller
         if ($field['type'] === 'text') {
             echo '<input name="' . esc_attr($key) . '" type="text" id="' . esc_attr($key) . '" value="' . $current_value . '" class="regular-text">';
         } elseif ($field['type'] === 'select' || $field['type'] === 'select_with_other') {
-            $class = $field['type'] === 'select_with_other' ? 'DetIt-onboarding-select-with-other' : '';
+            $class = $field['type'] === 'select_with_other' ? 'detit-settings-select-with-other' : '';
             echo '<select name="' . esc_attr($key) . '" id="' . esc_attr($key) . '" class="' . esc_attr($class) . '">';
             echo '<option value="">&mdash; Select &mdash;</option>';
             foreach ($field['options'] as $opt_val => $opt_label) {
@@ -114,37 +120,20 @@ class detit_Onboarding_Controller
         echo '</td>';
         echo '</tr>';
     }
-}
 
-/**
- * Global helper to get all onboarding settings.
- *
- * @return array
- */
-function detit_get_onboarding_settings()
-{
-    return get_option('detit_onboarding_settings', []);
-}
+    /**
+     * Helper to get all context settings.
+     */
+    public static function get_context()
+    {
+        return get_option('detit_context', []);
+    }
 
-/**
- * Global helper to get a specific onboarding setting.
- *
- * @param string $key
- * @param mixed $default
- * @return mixed
- */
-function detit_get_onboarding_setting($key, $default = '')
-{
-    $settings = detit_get_onboarding_settings();
-    return isset($settings[$key]) ? $settings[$key] : $default;
-}
-
-/**
- * Global helper to check if onboarding is completed.
- *
- * @return bool
- */
-function detit_is_onboarding_completed()
-{
-    return (bool) get_option('detit_onboarding_completed', false);
+    /**
+     * Helper to check if settings are completed.
+     */
+    public static function is_settings_completed()
+    {
+        return (bool) get_option('detit_settings_completed', false);
+    }
 }

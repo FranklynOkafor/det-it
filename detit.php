@@ -64,9 +64,9 @@ function detit_init() {
     require_once DETIT_PLUGIN_DIR . 'includes/admin/AjaxHandler.php';
     require_once DETIT_PLUGIN_DIR . 'includes/admin/ProductMetaBox.php';
     require_once DETIT_PLUGIN_DIR . 'includes/admin/dashboard.php';
-    require_once DETIT_PLUGIN_DIR . 'includes/admin/onboarding/onboarding-fields.php';
-    require_once DETIT_PLUGIN_DIR . 'includes/admin/onboarding/onboarding-save.php';
-    require_once DETIT_PLUGIN_DIR . 'includes/admin/onboarding/onboarding-controller.php';
+    require_once DETIT_PLUGIN_DIR . 'includes/admin/settings/class-detit-settings-fields.php';
+    require_once DETIT_PLUGIN_DIR . 'includes/admin/settings/class-detit-settings-save.php';
+    require_once DETIT_PLUGIN_DIR . 'includes/admin/settings/class-detit-settings-page.php';
 
     // Initialize Admin Classes
     new \DetIt\Admin\AdminAssets();
@@ -132,7 +132,7 @@ add_action('admin_init', function() {
     if (get_transient('detit_activation_redirect')) {
         delete_transient('detit_activation_redirect');
         if (!isset($_GET['activate-multi'])) {
-            wp_safe_redirect(admin_url('admin.php?page=detit-dashboard'));
+            wp_safe_redirect(admin_url('admin.php?page=detit-settings'));
             exit;
         }
     }
