@@ -49,6 +49,10 @@ class DetIt_Settings_Save
         update_option('detit_context', $clean_data);
         update_option('detit_settings_completed', true);
 
+        if (isset($data['detit_api_key'])) {
+            update_option('detit_api_key', sanitize_text_field($data['detit_api_key']));
+        }
+
         return true;
     }
 }

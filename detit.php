@@ -3,8 +3,8 @@
 /**
  * Plugin Name: DetIt – WooCommerce AI Content Generator
  * Description: Generates optimized product content (titles, descriptions, tags) using AI.
- * Version: 0.2.0
- * Author: DetIt Team
+ * Version: 1.0
+ * Author: Franklyn
  * License: GPL2+
  * Text Domain: DetIt
  */
@@ -16,7 +16,7 @@ if (!defined('ABSPATH')) {
 // Plugin constants
 define('DETIT_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('DETIT_PLUGIN_URL', plugin_dir_url(__FILE__));
-define('DETIT_VERSION', '0.2.0');
+define('DETIT_VERSION', '1.0');
 define('DETIT_FILE', __FILE__);
 
 /**
@@ -37,6 +37,8 @@ function detit_init() {
         add_action('admin_notices', 'detit_wc_missing_notice');
         return;
     }
+
+    add_action('admin_notices', 'detit_api_key_missing_notice');
 
     // 1. Core AI Components
     require_once DETIT_PLUGIN_DIR . 'includes/ai/api-auth.php';
@@ -103,6 +105,31 @@ function detit_wc_missing_notice() {
         <p><a href="<?php echo esc_url($action_url); ?>" class="button button-primary"><?php echo esc_html($action_text); ?></a></p>
     </div>
     <?php
+}
+
+/**
+ * Admin notice if Gemini API key is missing.
+ */
+function detit_api_key_missing_notice() {
+    if (!current_user_can('manage_options')) {
+        return;
+    }
+
+    // On the settings page the notice is rendered inline (after save), so skip it here
+    // to prevent showing a stale value from before the form submission is processed.
+    $screen = get_current_screen();
+    if ($screen && strpos($screen->id, 'detit-settings') !== false) {
+        return;
+    }
+
+    $api_key = get_option('detit_api_key');
+    if (empty($api_key) && !defined('DETIT_AI_API_KEY')) {
+        ?>
+        <div class="notice notice-warning is-dismissible">
+            <p><strong>DetIt:</strong> DetIt requires a Gemini API key to function. <a href="<?php echo esc_url(admin_url('admin.php?page=detit-settings')); ?>">Configure it here</a>.</p>
+        </div>
+        <?php
+    }
 }
 
 /**

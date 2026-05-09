@@ -41,6 +41,12 @@ class DetIt_Settings_Page
         // Disclosure Notice
         echo '<div class="notice notice-info inline"><p>' . esc_html__('This information is used to improve AI-generated product content. No data is sent externally without user action.', 'detit') . '</p></div>';
 
+        // API key warning — read AFTER handle_submit() so value is always fresh.
+        $current_api_key = get_option('detit_api_key');
+        if (empty($current_api_key) && !defined('DETIT_AI_API_KEY')) {
+            echo '<div class="notice notice-warning inline"><p><strong>' . esc_html__('DetIt:', 'detit') . '</strong> ' . esc_html__('DetIt requires a Gemini API key to function. Enter your key below.', 'detit') . '</p></div>';
+        }
+
         echo '<form method="post" action="">';
         
         wp_nonce_field('detit_settings', 'detit_settings_nonce');
@@ -52,6 +58,14 @@ class DetIt_Settings_Page
             $this->render_field($key, $field, $values);
         }
 
+        $api_key = get_option('detit_api_key');
+        echo '<tr>';
+        echo '<th scope="row"><label for="detit_api_key">' . esc_html__('Gemini API Key', 'detit') . '</label></th>';
+        echo '<td>';
+        echo '<input name="detit_api_key" type="password" id="detit_api_key" value="' . esc_attr($api_key) . '" class="regular-text">';
+        echo '</td>';
+        echo '</tr>';
+
         echo '</tbody>';
         echo '</table>';
 
@@ -60,6 +74,20 @@ class DetIt_Settings_Page
         echo '</p>';
 
         echo '</form>';
+
+        echo '<hr>';
+        echo '<h2>' . esc_html__('How To Get Your Gemini API Key', 'detit') . '</h2>';
+        echo '<p>' . esc_html__('The plugin will not function without a Gemini API key.', 'detit') . '</p>';
+        echo '<ol>';
+        echo '<li>' . esc_html__('Go to Google AI Studio', 'detit') . '</li>';
+        echo '<li>' . esc_html__('Sign in with your Google account', 'detit') . '</li>';
+        echo '<li>' . esc_html__('Create a new API key', 'detit') . '</li>';
+        echo '<li>' . esc_html__('Copy the generated API key', 'detit') . '</li>';
+        echo '<li>' . esc_html__('Paste it into the DetIt settings field above', 'detit') . '</li>';
+        echo '<li>' . esc_html__('Save settings', 'detit') . '</li>';
+        echo '</ol>';
+        echo '<p><a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" class="button">' . esc_html__('Get API Key from Google AI Studio', 'detit') . '</a></p>';
+
         echo '</div>';
         
         // Add minimal inline script to toggle "other" fields if needed

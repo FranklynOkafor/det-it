@@ -66,8 +66,6 @@ class ContentGenerator
 
     private function parse_response(string $raw): array
     {
-        // Write full raw response to a debug file for inspection
-        file_put_contents(DETIT_PLUGIN_DIR . 'gemini-debug.txt', $raw);
 
         $raw = trim($raw);
 

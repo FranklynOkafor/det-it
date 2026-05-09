@@ -19,13 +19,17 @@ class GeminiClient
 
     public function __construct()
     {
-        $key = defined('DETIT_AI_API_KEY') ? DETIT_AI_API_KEY : '';
+        $api_key = get_option('detit_api_key');
 
-        if (empty($key)) {
-            throw new \RuntimeException('DETIT_AI_API_KEY is not defined in wp-config.php');
+        if (empty($api_key) && defined('DETIT_AI_API_KEY')) {
+            $api_key = DETIT_AI_API_KEY;
         }
 
-        $this->api_key = $key;
+        if (empty($api_key)) {
+            throw new \RuntimeException('DetIt requires a Gemini API key to function.');
+        }
+
+        $this->api_key = $api_key;
     }
 
     /**
