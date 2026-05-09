@@ -23,11 +23,7 @@ class AjaxHandler
 
         check_ajax_referer('detit_nonce', 'nonce');
 
-        $product_id = isset($_POST['product_id']) ? intval($_POST['product_id']) : 0;
-
-        if (!$product_id) {
-            wp_send_json_error(['message' => 'Invalid product ID']);
-        }
+        $product_id = $this->check_authorization();
 
         try {
             $generator = new ContentGenerator();
@@ -46,11 +42,11 @@ class AjaxHandler
     {
         check_ajax_referer('detit_nonce', 'nonce');
 
-        $product_id = isset($_POST['product_id']) ? intval($_POST['product_id']) : 0;
+        $product_id = $this->check_authorization();
         $field = isset($_POST['field']) ? sanitize_text_field($_POST['field']) : '';
         $value = isset($_POST['value']) ? wp_unslash($_POST['value']) : '';
 
-        if (!$product_id || !$field) {
+        if (!$field) {
             wp_send_json_error(['message' => 'Invalid data provided']);
         }
 
@@ -74,10 +70,10 @@ class AjaxHandler
     {
         check_ajax_referer('detit_nonce', 'nonce');
 
-        $product_id = isset($_POST['product_id']) ? intval($_POST['product_id']) : 0;
+        $product_id = $this->check_authorization();
         $fields_json = isset($_POST['fields']) ? wp_unslash($_POST['fields']) : '';
 
-        if (!$product_id || empty($fields_json)) {
+        if (empty($fields_json)) {
             wp_send_json_error(['message' => 'Invalid data provided']);
         }
 
@@ -103,6 +99,26 @@ class AjaxHandler
         } catch (\Exception $e) {
             wp_send_json_error(['message' => $e->getMessage()]);
         }
+    }
+
+    /**
+     * Verifies that the request contains a valid product ID and the current user
+     * has permission to edit it. Prevents privilege escalation.
+     *
+     * @return int The sanitized product ID.
+     */
+    private function check_authorization()
+    {
+        $product_id = isset($_POST['product_id']) ? absint($_POST['product_id']) : 0;
+
+        if (!$product_id || !current_user_can('edit_post', $product_id)) {
+            wp_send_json_error(
+                ['message' => esc_html__('Unauthorized action.', 'detit')],
+                403
+            );
+        }
+
+        return $product_id;
     }
 
     private function save_field($product_id, $field, $value)
