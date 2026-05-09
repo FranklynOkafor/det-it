@@ -8,13 +8,18 @@ if (!defined('ABSPATH')) {
 
 class SEO_Migrator
 {
-    const BATCH_SIZE = 50;
+    const BATCH_SIZE = 15;
 
     public static function boot(): void
     {
         add_action('activated_plugin', [self::class, 'handle_plugin_change']);
         add_action('deactivated_plugin', [self::class, 'handle_plugin_change']);
-        add_action('admin_init', [self::class, 'process_migration']);
+        
+        // Lightweight check on admin_init
+        add_action('admin_init', [self::class, 'maybe_schedule_migration']);
+        
+        // Background process hook
+        add_action('detit_seo_migration_batch', [self::class, 'process_migration_batch']);
     }
 
     /**
@@ -36,12 +41,38 @@ class SEO_Migrator
     }
 
     /**
-     * Processes a batch of products to sync their DetIt meta into the newly active SEO plugin.
+     * Checks if a migration is needed and schedules it via Action Scheduler,
+     * or runs a synchronous fallback batch if Action Scheduler is unavailable.
      * Hooked on admin_init.
      */
-    public static function process_migration(): void
+    public static function maybe_schedule_migration(): void
     {
         if (get_option('detit_needs_migration') !== 'yes') {
+            return;
+        }
+
+        // Use WooCommerce Action Scheduler if available
+        if (function_exists('as_next_scheduled_action') && function_exists('as_enqueue_async_action')) {
+            if (!as_next_scheduled_action('detit_seo_migration_batch')) {
+                as_enqueue_async_action('detit_seo_migration_batch');
+            }
+        } else {
+            // Fallback: Process synchronously using a transient lock to avoid concurrent requests freezing the admin
+            if (false === get_transient('detit_seo_migration_lock')) {
+                set_transient('detit_seo_migration_lock', true, 60);
+                self::process_migration_batch();
+            }
+        }
+    }
+
+    /**
+     * Processes a batch of products to sync their DetIt meta into the newly active SEO plugin.
+     * Hooked on detit_seo_migration_batch for async processing, or called directly as fallback.
+     */
+    public static function process_migration_batch(): void
+    {
+        if (get_option('detit_needs_migration') !== 'yes') {
+            delete_transient('detit_seo_migration_lock');
             return;
         }
 
@@ -50,6 +81,7 @@ class SEO_Migrator
             // No supported plugin active, nothing to migrate to.
             delete_option('detit_needs_migration');
             delete_option('detit_migration_offset');
+            delete_transient('detit_seo_migration_lock');
             return;
         }
 
@@ -80,6 +112,7 @@ class SEO_Migrator
             // Migration complete
             delete_option('detit_needs_migration');
             delete_option('detit_migration_offset');
+            delete_transient('detit_seo_migration_lock');
             return;
         }
 
@@ -92,5 +125,13 @@ class SEO_Migrator
         }
 
         update_option('detit_migration_offset', $offset + self::BATCH_SIZE);
+
+        // Enqueue next batch if using Action Scheduler
+        if (function_exists('as_enqueue_async_action')) {
+            as_enqueue_async_action('detit_seo_migration_batch');
+        } else {
+            // Release lock for fallback
+            delete_transient('detit_seo_migration_lock');
+        }
     }
 }
