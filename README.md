@@ -1,222 +1,88 @@
-# DetIt
+=== DetIt ===
+Contributors: emeka002
+Tags: woocommerce, ai, product content, product descriptions, ecommerce
+Requires at least: 6.5
+Tested up to: 6.8
+Requires PHP: 7.4
+Stable tag: 1.0.0
+License: GPLv2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-DetIt is a lightweight AI-powered content generation toolkit for WooCommerce product pages.
+DetIt is a WooCommerce product content generation toolkit that helps store owners generate and manage product content directly inside the WordPress editor.
 
-The plugin helps store owners generate, optimize, and manage product content directly inside the WordPress product editor.
+== Description ==
 
-Unlike traditional SEO plugins such as Yoast SEO or Rank Math, DetIt focuses specifically on WooCommerce product content generation and product-level SEO enhancement.
+DetIt helps WooCommerce store owners generate and manage product content more efficiently.
 
----
+The plugin provides AI-assisted tools for generating product titles, descriptions, meta descriptions, and other product-related content directly inside the WooCommerce product editor.
 
-# Overview
+DetIt is designed specifically for WooCommerce workflows and focuses on simplifying product content management.
 
-DetIt is currently in active MVP development.
+Current features include:
 
-The plugin is being built to simplify one of the biggest problems in WooCommerce management:
-
-* Writing optimized product content at scale
-* Maintaining SEO consistency across products
-* Generating product metadata efficiently
-* Reducing manual product editing time
-
-The current architecture has been designed with scalability, security, and future automation features in mind.
-
----
-
-# Current MVP Features
-
-## AI Product Content Generation
-
-Generate optimized product content directly inside the WooCommerce product editor.
-
-Current generation capabilities include:
-
-* Product titles
-* Short descriptions
-* Long descriptions
-* SEO meta descriptions
-* Product tags
-
----
-
-## Product SEO Assistance
-
-DetIt currently includes lightweight SEO support features:
-
-* Focus keyword field
-* Meta description editor
-* Basic product optimization workflow
+* Product title generation
+* Short description generation
+* Long description generation
+* Meta description generation
+* Product tag generation
+* Focus keyword support
 * SEO plugin conflict detection
+* WooCommerce product editor integration
 
-Supported SEO plugins:
-
-* Yoast SEO
-* Rank Math
-* All in One SEO
-
-If another SEO plugin is detected, DetIt disables frontend meta output to prevent conflicts and operates strictly as a content generation and optimization assistant.
-
----
-
-# Architecture
-
-DetIt is built using a modular architecture designed for long-term scalability and maintainability.
-
-## Plugin Bootstrap System
-
-The plugin initializes through a centralized bootstrap layer responsible for:
-
-* Service loading
-* Dependency registration
-* Hook initialization
-* Runtime setup
-
----
-
-## Hook Registration Framework
-
-All WordPress hooks are registered through a dedicated hook loader system to maintain clean separation of concerns and reduce scattered hook logic.
-
----
-
-## Domain-Driven Core Models
-
-DetIt uses structured domain models to support future audit, generation, and automation systems.
-
-Current core models include:
-
-* **Issue** – represents optimization problems detected during processing
-* **AuditResult** – standardized audit result structure
-* **FixPlan** – structured representation of recommended improvements
-
-These models provide a shared contract between:
-
-* Content generation systems
-* Future audit engines
-* Admin UI components
-* Bulk operations
-
----
-
-## Serialization Layer
-
-Domain models include serialization helpers for safe storage and retrieval from the WordPress database.
-
-This enables future support for:
-
-* Cached audit results
-* Background processing
-* Bulk optimization queues
-* AI generation history
-
----
-
-## Security Infrastructure
-
-DetIt includes a security-first request pipeline for all admin operations.
-
-Implemented security systems include:
-
-* Capability management
-* Nonce generation and verification
-* Permission enforcement utilities
-* Sanitized request handling
-* Contributor security guidelines
-
-This foundation ensures future AI generation and bulk processing systems operate securely within WordPress standards.
-
----
-
-# Planned Features
-
-## AI Content Generation Expansion
-
-Upcoming generation features include:
-
-* Keyword suggestions
-* Product attribute-based content generation
-* Image ALT text generation
-* Tone and style customization
-* Multi-language generation support
-* Bulk AI generation tools
-
----
-
-## Product Optimization Tools
-
-Planned optimization systems include:
-
-* Product SEO scoring
-* Keyword usage analysis
-* Meta optimization suggestions
-* Image optimization checks
-* Product content quality analysis
-
----
-
-## Bulk Operations
-
-Future bulk tools will include:
-
-* Bulk content generation
-* Bulk SEO improvements
-* Product optimization reports
-* Product-wide content audits
-
----
-
-# Compatibility
-
-DetIt is designed to work alongside major WordPress SEO plugins.
-
-Detected plugins include:
+DetIt is compatible with popular SEO plugins including:
 
 * Yoast SEO
 * Rank Math
 * All in One SEO
 
-When another SEO plugin is active, DetIt avoids duplicate meta output and functions primarily as a WooCommerce product content generation assistant.
+When another supported SEO plugin is active, DetIt avoids duplicate frontend SEO output and works primarily as a content generation assistant.
 
----
+External services are used to generate AI content. Product content entered into the generator may be sent to third-party AI providers.
 
-# Usage
+== Installation ==
 
-1. Navigate to **Products → Edit Product**
-2. Scroll to the **DetIt SEO** meta box
-3. Generate or edit:
+1. Upload the plugin files to the `/wp-content/plugins/detit` directory, or install the plugin through the WordPress plugins screen.
+2. Activate the plugin through the "Plugins" screen in WordPress.
+3. Ensure WooCommerce is installed and activated.
+4. Generate a Gemini API key from Google AI Studio.
+5. Add the API key in the plugin settings page.
+6. Open any WooCommerce product editor page.
+7. Scroll to the DetIt meta box to begin generating content.
 
-   * Product title
-   * Short description
-   * Long description
-   * Meta description
-   * Focus keyword
-4. Save or update the product
+== Frequently Asked Questions ==
 
----
+= Does DetIt require WooCommerce? =
 
-# Development Philosophy
+Yes. WooCommerce must be installed and activated.
 
-DetIt is being developed with a focus on:
+= Does DetIt work with Yoast SEO or Rank Math? =
 
-* Modular architecture
-* Security-first WordPress practices
-* Scalable AI integration
-* Maintainable code structure
-* WooCommerce-focused workflows
+Yes. DetIt is designed to work alongside major SEO plugins.
 
-The project is being built incrementally, with each development phase strengthening the underlying architecture before introducing larger automation systems.
+= Does DetIt generate frontend SEO output? =
 
----
+If another supported SEO plugin is active, DetIt avoids duplicate SEO output and functions primarily as a content generation assistant.
 
-# Roadmap
+= Does DetIt require an AI API key? =
 
-Planned development milestones include:
+Yes. Content generation features require a supported AI provider API key.
 
-* AI-powered product generation improvements
-* Advanced product optimization systems
-* Bulk content generation
-* WooCommerce SEO scoring
-* Product analysis dashboards
-* AI-assisted workflow automation
+= Which AI provider is currently supported? =
 
-The long-term goal of DetIt is to become a focused WooCommerce product content generation and optimization toolkit for store owners managing products at scale.
+The current version supports Gemini API integration.
+
+== Screenshots ==
+
+1. DetIt product editor meta box
+2. Content generation interface
+3. Product content workflow
+
+== Changelog ==
+
+= 1.0.0 =
+* Initial release
+
+== Upgrade Notice ==
+
+= 1.0.0 =
+Initial release of DetIt.

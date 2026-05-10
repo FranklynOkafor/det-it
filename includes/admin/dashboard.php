@@ -11,8 +11,8 @@ class Dashboard
     public function register_menu()
     {
         add_menu_page(
-            'DetIt Settings',        // Page title
-            'DetIt Settings',        // Menu title
+            esc_html__('DetIt Settings', 'detit'),        // Page title
+            esc_html__('DetIt Settings', 'detit'),        // Menu title
             'manage_options',        // Capability
             'detit-settings',        // Slug
             [$this, 'render'],       // Callback

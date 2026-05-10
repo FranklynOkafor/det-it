@@ -14,7 +14,6 @@ if (!defined('ABSPATH')) exit;
 
 class GeminiClient
 {
-    private const MODEL = 'gemini-2.5-flash';
     private string $api_key;
 
     public function __construct()
@@ -32,6 +31,15 @@ class GeminiClient
         $this->api_key = $api_key;
     }
 
+    private function get_model(): string
+    {
+        $model = get_option('detit_ai_model');
+        if (empty($model)) {
+            $model = 'gemini-2.5-flash';
+        }
+        return apply_filters('detit_ai_model', $model);
+    }
+
     /**
      * Send a prompt to Gemini and return the raw text response.
      *
@@ -42,7 +50,7 @@ class GeminiClient
      */
     public function complete(string $system_prompt, string $user_prompt): string
     {
-        $url = 'https://generativelanguage.googleapis.com/v1beta/models/' . self::MODEL . ':generateContent?key=' . $this->api_key;
+        $url = 'https://generativelanguage.googleapis.com/v1beta/models/' . $this->get_model() . ':generateContent?key=' . $this->api_key;
 
         $body = wp_json_encode([
             'system_instruction' => [

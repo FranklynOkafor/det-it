@@ -47,7 +47,7 @@ class AjaxHandler
         $value = isset($_POST['value']) ? wp_unslash($_POST['value']) : '';
 
         if (!$field) {
-            wp_send_json_error(['message' => 'Invalid data provided']);
+            wp_send_json_error(['message' => esc_html__('Invalid data provided', 'detit')]);
         }
 
         try {
@@ -74,12 +74,12 @@ class AjaxHandler
         $fields_json = isset($_POST['fields']) ? wp_unslash($_POST['fields']) : '';
 
         if (empty($fields_json)) {
-            wp_send_json_error(['message' => 'Invalid data provided']);
+            wp_send_json_error(['message' => esc_html__('Invalid data provided', 'detit')]);
         }
 
         $fields = json_decode($fields_json, true);
         if (!is_array($fields)) {
-            wp_send_json_error(['message' => 'Invalid fields format']);
+            wp_send_json_error(['message' => esc_html__('Invalid fields format', 'detit')]);
         }
 
         try {
