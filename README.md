@@ -1,161 +1,222 @@
 # DetIt
 
-DetIt is a lightweight SEO toolkit for WooCommerce product pages.
+DetIt is a lightweight AI-powered content generation toolkit for WooCommerce product pages.
 
-The plugin helps store owners **analyze, improve, and generate SEO content** for their products directly inside the WordPress product editor.
+The plugin helps store owners generate, optimize, and manage product content directly inside the WordPress product editor.
 
-Unlike general SEO plugins such as Yoast or Rank Math, DetIt focuses specifically on **product-level SEO optimization for WooCommerce stores**.
-
----
-
-# Current Development Status
-
-DetIt is currently in **active MVP development**.
-
-The foundational architecture of the plugin has been implemented, including:
-
-* Modular plugin bootstrap system
-* Hook registration framework
-* Core domain models for the audit pipeline
-* Security baseline infrastructure for admin actions and bulk operations
-
-These components establish the technical foundation required to safely build the SEO auditing and generation features planned for the MVP.
+Unlike traditional SEO plugins such as Yoast SEO or Rank Math, DetIt focuses specifically on WooCommerce product content generation and product-level SEO enhancement.
 
 ---
 
-# Features
+# Overview
 
-## Current MVP Features
+DetIt is currently in active MVP development.
 
-* SEO meta box inside the WooCommerce product editor
-* Meta description editor
+The plugin is being built to simplify one of the biggest problems in WooCommerce management:
+
+* Writing optimized product content at scale
+* Maintaining SEO consistency across products
+* Generating product metadata efficiently
+* Reducing manual product editing time
+
+The current architecture has been designed with scalability, security, and future automation features in mind.
+
+---
+
+# Current MVP Features
+
+## AI Product Content Generation
+
+Generate optimized product content directly inside the WooCommerce product editor.
+
+Current generation capabilities include:
+
+* Product titles
+* Short descriptions
+* Long descriptions
+* SEO meta descriptions
+* Product tags
+
+---
+
+## Product SEO Assistance
+
+DetIt currently includes lightweight SEO support features:
+
 * Focus keyword field
-* Automatic meta description output when no SEO plugin is active
-* SEO plugin detection:
+* Meta description editor
+* Basic product optimization workflow
+* SEO plugin conflict detection
 
-  * Yoast SEO
-  * Rank Math
-  * All in One SEO
-
-When another SEO plugin is detected, DetIt disables meta tag output to prevent conflicts and acts strictly as an **SEO auditing and optimization assistant**.
-
----
-
-# Architecture
-
-DetIt is built with a **modular architecture** to keep the plugin scalable and maintainable.
-
-Key architectural components implemented so far:
-
-### Plugin Bootstrap
-
-The plugin initializes through a central bootstrap file that loads services, registers hooks, and ensures proper dependency loading.
-
-### Hook Registration Framework
-
-All WordPress hooks are registered through a structured hook loader to avoid scattered `add_action` and `add_filter` calls across the codebase.
-
-### Domain Models
-
-The core audit pipeline is built around standardized domain models:
-
-* **Issue** – represents a single SEO problem detected during a product audit
-* **AuditResult** – represents the result of auditing a product
-* **FixPlan** – describes the set of actions required to resolve detected issues
-
-These models act as a **shared data structure between the audit engine, UI, and bulk operations**.
-
-### Serialization Layer
-
-Domain models include serialization helpers that allow audit results and fix plans to be safely stored and retrieved from the WordPress database.
-
-### Security Infrastructure
-
-A security baseline layer has been implemented to ensure all future admin actions follow WordPress security best practices.
-
-Security utilities include:
-
-* Capability management system
-* Nonce generation and verification helpers
-* Permission enforcement utilities
-* Secure request input handling
-* Contributor security checklist
-
-This ensures future features such as audits, bulk fixes, and AI generation operate within a **consistent and secure request pipeline**.
-
----
-
-# Planned Features
-
-## SEO Auditing
-
-* Title length analysis
-* Meta description analysis
-* Keyword usage checks
-* Image ALT attribute detection
-* Product SEO scoring
-
-## SEO Content Generation
-
-* Generate optimized product descriptions
-* Generate SEO meta descriptions
-* Generate keyword suggestions
-* Generate image ALT text
-
-Content generation will assist store owners in producing optimized product content quickly while maintaining control over final edits.
-
----
-
-# Compatibility
-
-DetIt is designed to work alongside major SEO plugins.
-
-If the plugin detects any of the following, it will **not output meta tags** to avoid conflicts:
+Supported SEO plugins:
 
 * Yoast SEO
 * Rank Math
 * All in One SEO
 
-In these cases DetIt functions strictly as an **SEO auditing and optimization tool**.
+If another SEO plugin is detected, DetIt disables frontend meta output to prevent conflicts and operates strictly as a content generation and optimization assistant.
+
+---
+
+# Architecture
+
+DetIt is built using a modular architecture designed for long-term scalability and maintainability.
+
+## Plugin Bootstrap System
+
+The plugin initializes through a centralized bootstrap layer responsible for:
+
+* Service loading
+* Dependency registration
+* Hook initialization
+* Runtime setup
+
+---
+
+## Hook Registration Framework
+
+All WordPress hooks are registered through a dedicated hook loader system to maintain clean separation of concerns and reduce scattered hook logic.
+
+---
+
+## Domain-Driven Core Models
+
+DetIt uses structured domain models to support future audit, generation, and automation systems.
+
+Current core models include:
+
+* **Issue** – represents optimization problems detected during processing
+* **AuditResult** – standardized audit result structure
+* **FixPlan** – structured representation of recommended improvements
+
+These models provide a shared contract between:
+
+* Content generation systems
+* Future audit engines
+* Admin UI components
+* Bulk operations
+
+---
+
+## Serialization Layer
+
+Domain models include serialization helpers for safe storage and retrieval from the WordPress database.
+
+This enables future support for:
+
+* Cached audit results
+* Background processing
+* Bulk optimization queues
+* AI generation history
+
+---
+
+## Security Infrastructure
+
+DetIt includes a security-first request pipeline for all admin operations.
+
+Implemented security systems include:
+
+* Capability management
+* Nonce generation and verification
+* Permission enforcement utilities
+* Sanitized request handling
+* Contributor security guidelines
+
+This foundation ensures future AI generation and bulk processing systems operate securely within WordPress standards.
+
+---
+
+# Planned Features
+
+## AI Content Generation Expansion
+
+Upcoming generation features include:
+
+* Keyword suggestions
+* Product attribute-based content generation
+* Image ALT text generation
+* Tone and style customization
+* Multi-language generation support
+* Bulk AI generation tools
+
+---
+
+## Product Optimization Tools
+
+Planned optimization systems include:
+
+* Product SEO scoring
+* Keyword usage analysis
+* Meta optimization suggestions
+* Image optimization checks
+* Product content quality analysis
+
+---
+
+## Bulk Operations
+
+Future bulk tools will include:
+
+* Bulk content generation
+* Bulk SEO improvements
+* Product optimization reports
+* Product-wide content audits
+
+---
+
+# Compatibility
+
+DetIt is designed to work alongside major WordPress SEO plugins.
+
+Detected plugins include:
+
+* Yoast SEO
+* Rank Math
+* All in One SEO
+
+When another SEO plugin is active, DetIt avoids duplicate meta output and functions primarily as a WooCommerce product content generation assistant.
 
 ---
 
 # Usage
 
-1. Navigate to **Products → Edit Product**.
-2. Scroll to the **DetIt SEO** meta box.
-3. Enter or generate:
+1. Navigate to **Products → Edit Product**
+2. Scroll to the **DetIt SEO** meta box
+3. Generate or edit:
 
+   * Product title
+   * Short description
+   * Long description
    * Meta description
    * Focus keyword
-4. Update the product.
+4. Save or update the product
 
-If no external SEO plugin is active, DetIt will output the meta description on the product page.
+---
+
+# Development Philosophy
+
+DetIt is being developed with a focus on:
+
+* Modular architecture
+* Security-first WordPress practices
+* Scalable AI integration
+* Maintainable code structure
+* WooCommerce-focused workflows
+
+The project is being built incrementally, with each development phase strengthening the underlying architecture before introducing larger automation systems.
 
 ---
 
 # Roadmap
 
-Upcoming development phases include:
+Planned development milestones include:
 
-* Product SEO audit engine
-* Product SEO scoring system
-* AI-assisted SEO content generation
-* Image optimization checks
-* Product SEO reports
-* Bulk product SEO analysis and fixes
+* AI-powered product generation improvements
+* Advanced product optimization systems
+* Bulk content generation
+* WooCommerce SEO scoring
+* Product analysis dashboards
+* AI-assisted workflow automation
 
-The goal of DetIt is to become a **focused SEO toolkit dedicated to WooCommerce product optimization**.
-
----
-
-# Development
-
-DetIt is currently being developed with a focus on:
-
-* Clean architecture
-* Security-first WordPress patterns
-* Modular plugin design
-* Scalable audit and automation systems
-
-The project is being built incrementally with each phase introducing a new architectural component before moving to feature development.
+The long-term goal of DetIt is to become a focused WooCommerce product content generation and optimization toolkit for store owners managing products at scale.

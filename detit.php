@@ -2,7 +2,7 @@
 
 /**
  * Plugin Name: DetIt – WooCommerce AI Content Generator
- * Description: Generates optimized product content (titles, descriptions, tags) using AI.
+ * Description: Generate SEO-optimized WooCommerce product titles, descriptions, tags, and metadata with AI.
  * Version: 1.0
  * Author: Franklyn
  * License: GPL2+

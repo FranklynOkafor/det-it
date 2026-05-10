@@ -16,7 +16,7 @@ class DetIt_Settings_Page
     public function handle_submit()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['detit_settings_submit'])) {
-            $success = DetIt_Settings_Save::save($_POST);
+            $success = DetIt_Settings_Save::save(wp_unslash($_POST));
             if ($success) {
                 echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__('Settings saved successfully.', 'detit') . '</p></div>';
             } else {

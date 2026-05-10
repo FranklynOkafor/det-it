@@ -43,7 +43,7 @@ class AjaxHandler
         check_ajax_referer('detit_nonce', 'nonce');
 
         $product_id = $this->check_authorization();
-        $field = isset($_POST['field']) ? sanitize_text_field($_POST['field']) : '';
+        $field = isset($_POST['field']) ? sanitize_text_field(wp_unslash($_POST['field'])) : '';
         $value = isset($_POST['value']) ? wp_unslash($_POST['value']) : '';
 
         if (!$field) {
@@ -109,7 +109,7 @@ class AjaxHandler
      */
     private function check_authorization()
     {
-        $product_id = isset($_POST['product_id']) ? absint($_POST['product_id']) : 0;
+        $product_id = isset($_POST['product_id']) ? absint(wp_unslash($_POST['product_id'])) : 0;
 
         if (!$product_id || !current_user_can('edit_post', $product_id)) {
             wp_send_json_error(
