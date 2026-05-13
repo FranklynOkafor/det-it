@@ -6,7 +6,8 @@
  * Version: 1.0
  * Author: Franklyn Okafor
  * License: GPL2+
- * Text Domain: DetIt
+ * Text Domain: detIt
+ * Domain Path: /languages
  */
 
 if (!defined('ABSPATH')) {
@@ -79,8 +80,6 @@ function detit_init() {
         $dashboard = new \DetIt\Admin\Dashboard();
         add_action('admin_menu', [$dashboard, 'register_menu']);
     }
-
-    load_plugin_textdomain('detit', false, dirname(plugin_basename(__FILE__)) . '/languages');
 }
 add_action('plugins_loaded', 'detit_init');
 
@@ -158,6 +157,7 @@ register_deactivation_hook(__FILE__, 'detit_deactivate');
 add_action('admin_init', function() {
     if (get_transient('detit_activation_redirect')) {
         delete_transient('detit_activation_redirect');
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended
         if (!isset($_GET['activate-multi'])) {
             wp_safe_redirect(admin_url('admin.php?page=detit-settings'));
             exit;

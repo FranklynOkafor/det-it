@@ -15,7 +15,8 @@ class DetIt_Settings_Page
 {
     public function handle_submit()
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['detit_settings_submit'])) {
+        if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['detit_settings_submit'])) {
+            check_admin_referer('detit_settings', 'detit_settings_nonce');
             $success = DetIt_Settings_Save::save(wp_unslash($_POST));
             if ($success) {
                 echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__('Settings saved successfully.', 'detit') . '</p></div>';
@@ -118,29 +119,30 @@ class DetIt_Settings_Page
 
     public function render_field($key, $field, $values)
     {
-        $current_value = isset($values[$key]) ? esc_attr($values[$key]) : (isset($field['default']) ? esc_attr($field['default']) : '');
+        $current_value = isset($values[$key]) ? $values[$key] : (isset($field['default']) ? $field['default'] : '');
 
         echo '<tr>';
         echo '<th scope="row"><label for="' . esc_attr($key) . '">' . esc_html($field['label']) . '</label></th>';
         echo '<td>';
 
         if ($field['type'] === 'text') {
-            echo '<input name="' . esc_attr($key) . '" type="text" id="' . esc_attr($key) . '" value="' . $current_value . '" class="regular-text">';
+            echo '<input name="' . esc_attr($key) . '" type="text" id="' . esc_attr($key) . '" value="' . esc_attr($current_value) . '" class="regular-text">';
         } elseif ($field['type'] === 'select' || $field['type'] === 'select_with_other') {
             $class = $field['type'] === 'select_with_other' ? 'detit-settings-select-with-other' : '';
             echo '<select name="' . esc_attr($key) . '" id="' . esc_attr($key) . '" class="' . esc_attr($class) . '">';
             echo '<option value="">&mdash; Select &mdash;</option>';
             foreach ($field['options'] as $opt_val => $opt_label) {
-                $selected = selected($current_value, $opt_val, false);
-                echo '<option value="' . esc_attr($opt_val) . '" ' . $selected . '>' . esc_html($opt_label) . '</option>';
+                echo '<option value="' . esc_attr($opt_val) . '" ';
+                selected($current_value, $opt_val, true);
+                echo '>' . esc_html($opt_label) . '</option>';
             }
             echo '</select>';
 
             if ($field['type'] === 'select_with_other') {
                 $custom_key = $key . '_custom';
-                $custom_value = isset($values[$custom_key]) ? esc_attr($values[$custom_key]) : '';
+                $custom_value = isset($values[$custom_key]) ? $values[$custom_key] : '';
                 echo '<div id="' . esc_attr($key) . '_custom_container" style="display:none; margin-top: 10px;">';
-                echo '<input name="' . esc_attr($custom_key) . '" type="text" id="' . esc_attr($custom_key) . '" value="' . $custom_value . '" class="regular-text" placeholder="Please specify...">';
+                echo '<input name="' . esc_attr($custom_key) . '" type="text" id="' . esc_attr($custom_key) . '" value="' . esc_attr($custom_value) . '" class="regular-text" placeholder="Please specify...">';
                 echo '</div>';
             }
         }

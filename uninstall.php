@@ -10,7 +10,7 @@ function detit_uninstall()
     // Drop database table
     global $wpdb;
     $table_name = $wpdb->prefix . 'detit_products';
-    $wpdb->query("DROP TABLE IF EXISTS $table_name");
+    $wpdb->query($wpdb->prepare("DROP TABLE IF EXISTS %i", $table_name));
 
     // Cleanup options
     delete_option('detit_api_key');

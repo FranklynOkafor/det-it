@@ -103,7 +103,7 @@ class ContentGenerator
         // All strategies failed
         $preview = mb_substr($raw, 0, 500);
         throw new \RuntimeException(
-            'Failed to parse Gemini response as JSON. Raw preview: ' . $preview
+            'Failed to parse Gemini response as JSON. Raw preview: ' . esc_html($preview)
         );
     }
 

@@ -37,19 +37,14 @@ class PromptBuilder
             ? "The store is described as: {$store_description}"
             : "No additional store description has been provided.";
 
-        return <<<PROMPT
-You are an expert e-commerce copywriter for {$store_name}.
-
-{$store_context}
-
-Your writing should always:
-- Target this audience: {$target_audience}
-- Use a {$tone} tone throughout
-- Prioritise clarity, persuasion, and SEO value
-- Avoid filler phrases, hype words, and repetition
-
-You will receive product data and must return ONLY a valid JSON object that matches the schema provided in the user message. Do not include any explanation, markdown fences, or text outside the JSON object.
-PROMPT;
+        return "You are an expert e-commerce copywriter for {$store_name}.\n\n" .
+               "{$store_context}\n\n" .
+               "Your writing should always:\n" .
+               "- Target this audience: {$target_audience}\n" .
+               "- Use a {$tone} tone throughout\n" .
+               "- Prioritise clarity, persuasion, and SEO value\n" .
+               "- Avoid filler phrases, hype words, and repetition\n\n" .
+               "You will receive product data and must return ONLY a valid JSON object that matches the schema provided in the user message. Do not include any explanation, markdown fences, or text outside the JSON object.";
     }
 
     // -------------------------------------------------------------------------
@@ -74,30 +69,24 @@ PROMPT;
             $candidate_tags_block = "\n## Candidate Tags\nConsider reusing the following existing store tags if they are highly relevant:\n{$formatted_candidates}\n";
         }
 
-        return <<<PROMPT
-Generate optimised product content for the following WooCommerce product.
-
-## Product Data
-- **Title:** {$title}
-- **Categories:** {$categories}
-- **Tags:** {$tags}
-{$existing_content}{$candidate_tags_block}
-## Required Output Schema
-Return ONLY a JSON object that strictly matches this schema — no extra keys, no missing keys:
-
-{$schema}
-
-Use the existing content above as context and source material. Improve, expand, or rewrite it as needed to maximise quality and SEO value.
-
-## Tag Generation Rules
-When generating the "tags" array:
-- Provide a STRICT MAXIMUM of 6 tags.
-- Prefer selecting from the "Candidate Tags" list above if they are highly relevant to the product.
-- Only generate new tags if the candidate tags are irrelevant or insufficient.
-- Do NOT create duplicate or near-duplicate tags.
-- Each tag must be concise (1–3 words) and directly related to the product.
-- Return ONLY the required JSON object as specified.
-PROMPT;
+        return "Generate optimised product content for the following WooCommerce product.\n\n" .
+               "## Product Data\n" .
+               "- **Title:** {$title}\n" .
+               "- **Categories:** {$categories}\n" .
+               "- **Tags:** {$tags}\n" .
+               "{$existing_content}{$candidate_tags_block}\n" .
+               "## Required Output Schema\n" .
+               "Return ONLY a JSON object that strictly matches this schema — no extra keys, no missing keys:\n\n" .
+               "{$schema}\n\n" .
+               "Use the existing content above as context and source material. Improve, expand, or rewrite it as needed to maximise quality and SEO value.\n\n" .
+               "## Tag Generation Rules\n" .
+               "When generating the \"tags\" array:\n" .
+               "- Provide a STRICT MAXIMUM of 6 tags.\n" .
+               "- Prefer selecting from the \"Candidate Tags\" list above if they are highly relevant to the product.\n" .
+               "- Only generate new tags if the candidate tags are irrelevant or insufficient.\n" .
+               "- Do NOT create duplicate or near-duplicate tags.\n" .
+               "- Each tag must be concise (1–3 words) and directly related to the product.\n" .
+               "- Return ONLY the required JSON object as specified.";
     }
 
     // -------------------------------------------------------------------------

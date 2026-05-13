@@ -82,14 +82,14 @@ class GeminiClient
         ]);
 
         if (is_wp_error($response)) {
-            throw new \RuntimeException('HTTP request failed: ' . $response->get_error_message());
+            throw new \RuntimeException('HTTP request failed: ' . esc_html($response->get_error_message()));
         }
 
         $status = wp_remote_retrieve_response_code($response);
         $raw    = wp_remote_retrieve_body($response);
 
         if ($status !== 200) {
-            throw new \RuntimeException("Gemini API error {$status}: {$raw}");
+            throw new \RuntimeException('Gemini API error ' . esc_html($status) . ': ' . esc_html($raw));
         }
 
         $data = json_decode($raw, true);

@@ -19,9 +19,11 @@ class AjaxHandler
     public function handle()
     {
         // Allow enough time for the Gemini API round-trip
-        set_time_limit(120);
+        if (function_exists('set_time_limit')) {
+            set_time_limit(120); // phpcs:ignore Squiz.PHP.DiscouragedFunctions.Discouraged
+        }
 
-        check_ajax_referer('detit_nonce', 'nonce');
+
 
         $product_id = $this->check_authorization();
 
@@ -40,11 +42,11 @@ class AjaxHandler
 
     public function add_single_field()
     {
-        check_ajax_referer('detit_nonce', 'nonce');
+
 
         $product_id = $this->check_authorization();
         $field = isset($_POST['field']) ? sanitize_text_field(wp_unslash($_POST['field'])) : '';
-        $value = isset($_POST['value']) ? wp_unslash($_POST['value']) : '';
+        $value = isset($_POST['value']) ? wp_kses_post(wp_unslash($_POST['value'])) : '';
 
         if (!$field) {
             wp_send_json_error(['message' => esc_html__('Invalid data provided', 'detit')]);
@@ -68,9 +70,10 @@ class AjaxHandler
 
     public function add_all_fields()
     {
-        check_ajax_referer('detit_nonce', 'nonce');
+
 
         $product_id = $this->check_authorization();
+        // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
         $fields_json = isset($_POST['fields']) ? wp_unslash($_POST['fields']) : '';
 
         if (empty($fields_json)) {
@@ -109,6 +112,7 @@ class AjaxHandler
      */
     private function check_authorization()
     {
+        check_ajax_referer('detit_nonce', 'nonce');
         $product_id = isset($_POST['product_id']) ? absint(wp_unslash($_POST['product_id'])) : 0;
 
         if (!$product_id || !current_user_can('edit_post', $product_id)) {
