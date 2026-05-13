@@ -95,6 +95,7 @@ class SEO_Migrator
             'offset'         => $offset,
             'fields'         => 'ids',
             'no_found_rows'  => true,
+            // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Acceptable for background batch migration.
             'meta_query'     => [
                 'relation' => 'OR',
                 [

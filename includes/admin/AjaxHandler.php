@@ -43,7 +43,7 @@ class AjaxHandler
     public function add_single_field()
     {
 
-
+        check_ajax_referer('detit_nonce', 'nonce');
         $product_id = $this->check_authorization();
         $field = isset($_POST['field']) ? sanitize_text_field(wp_unslash($_POST['field'])) : '';
         $value = isset($_POST['value']) ? wp_kses_post(wp_unslash($_POST['value'])) : '';
@@ -71,7 +71,7 @@ class AjaxHandler
     public function add_all_fields()
     {
 
-
+        check_ajax_referer('detit_nonce', 'nonce');
         $product_id = $this->check_authorization();
         // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
         $fields_json = isset($_POST['fields']) ? wp_unslash($_POST['fields']) : '';

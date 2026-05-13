@@ -10,6 +10,7 @@ function detit_uninstall()
     // Drop database table
     global $wpdb;
     $table_name = $wpdb->prefix . 'detit_products';
+    // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
     $wpdb->query($wpdb->prepare("DROP TABLE IF EXISTS %i", $table_name));
 
     // Cleanup options

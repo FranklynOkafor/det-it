@@ -1,14 +1,14 @@
-=== DetIt ===
+=== DetIt AI Content Generator for WooCommerce ===
 Contributors: emeka002
 Tags: woocommerce, ai, product content, product descriptions, ecommerce
 Requires at least: 6.5
-Tested up to: 6.8
+Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.0.0
+Stable tag: 1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-DetIt is a WooCommerce product content generation toolkit that helps store owners generate and manage product content directly inside the WordPress editor.
+DetIt is an AI content generation toolkit that helps WooCommerce store owners generate and manage product content inside the WordPress editor.
 
 == Description ==
 
