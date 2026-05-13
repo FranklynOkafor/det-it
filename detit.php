@@ -6,7 +6,7 @@
  * Version: 1.0
  * Author: Franklyn Okafor
  * License: GPL2+
- * Text Domain: detIt
+ * Text Domain: detit
  * Domain Path: /languages
  */
 
